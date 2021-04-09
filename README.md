@@ -8,4 +8,28 @@ This simple system helps Amazon customers improve their privacy while providing 
 
 Let's extract money through Amazon affiliates  links
 
+associates ID:
 mutualsupply-20
+
+
+# Development
+
+## Set up
+
+Clone the repo...
+
+```
+# Set up virtual env and download the requirements
+
+$ python3 -m venv venv
+
+$ source venv/bin/activate
+
+$ pip install -r requirements.txt
+
+$ source .env
+
+$ flask run
+
+
+```
