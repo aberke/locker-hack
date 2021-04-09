@@ -1,9 +1,20 @@
 <!-- ask_buy.html -->
 
-<!doctype html>
-<title>Hello from Flask</title>
-{% if name %}
-  <h1>Hello {{ name }}!</h1>
-{% else %}
-  <h1>Hello, World!</h1>
-{% endif %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Hello from Flask</title>
+  </head>
+  <body>
+    {% if name %}
+    <h1>Hello {{ name }}!</h1>
+    {% else %}
+    <h1>Hello, World!</h1>
+    {% endif %}
+
+    <form method="POST" action="/api/referral">
+      URL: <input type="text" name="starturl" required /><br />
+      Your new URL: {{ new_url }}
+    </form>
+  </body>
+</html>

@@ -12,9 +12,10 @@ def blog_redirect():
 def hello_world():
     return 'Hello, World!'
 
+
 @app.route('/ask-buy')
 def ask_buy():
-	return render_template('ask_buy.html')
+    return render_template('ask_buy.html')
 
 
 # initial stuff above
@@ -27,18 +28,16 @@ def ask_buy():
 
 @app.route('/ask/')
 def ask():
-	"""
-	Returns page for user to make a ask.
-	POSTs to /api/ask
-	"""
-	return 'This is the page to make an ask'
+    """
+    Returns page for user to make a ask.
+    POSTs to /api/ask
+    """
+    return 'This is the page to make an ask'
 
 
 @app.route('/buy/<int:ask_id>/')
 def buy(ask_id):
-	pass
-
-
+    pass
 
 
 # API
@@ -46,21 +45,24 @@ def buy(ask_id):
 
 @app.route('/api/asks', methods=['GET'])
 def api_asks():
-	"""
-	Returns all of the ask items, filtered to tags in the URL parameters
-	"""
-	pass
-
+    """
+    Returns all of the ask items, filtered to tags in the URL parameters
+    """
+    pass
 
 
 # POST ask
-@app.route('/api/ask', methods=['GET','POST'])
+@app.route('/api/ask', methods=['GET', 'POST'])
 def api_ask(item_url):
-	if request.method == 'POST':
-		# TODO
-		# create or  update the ask object
-		return 'POST ASK'
-	else:
-		# return the ask object
-		return 'GET ASK'
+    if request.method == 'POST':
+        # TODO
+        # create or  update the ask object
+        return 'POST ASK'
+    else:
+        # return the ask object
+        return 'GET ASK'
 
+
+@app.route('/api/referal', methods=['POST'])
+def referral(url):
+    # TODO

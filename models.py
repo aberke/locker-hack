@@ -14,6 +14,7 @@ engine = db.create_engine('sqlite:///lockers.db')
 
 
 class Locker(db.Model):
+    __tablename__ = 'lockers'
     id = db.Column(db.Integer, primary_key=True)
     lat = db.Column(db.Float)
     lng = db.Column(db.Float)
