@@ -1,16 +1,16 @@
 
+import os
+
+import enum
 from geoalchemy2 import func
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, DateTime, Integer, Boolean, String, ForeignKey, Index
 from sqlalchemy.orm import backref, relationship
 from sqlalchemy import create_engine
 from shapely import geometry
 from uuid import uuid4
-import enum
-import os
 
-db = SQLAlchemy()
-engine = db.create_engine('sqlite:///lockers.db')
+from app import db
+
 
 
 class Locker(db.Model):
@@ -22,15 +22,6 @@ class Locker(db.Model):
     address = db.Column(db.String)
     active = db.Column(db.Boolean)
     staffed = db.Column(db.Boolean)
-
-
-class Note(db.Model):
-    __tablename__ = "notes"
-    id = db.Column(db.Integer, primary_key=True)
-    date_created = db.Column(DateTime, default=func.now())
-    ask_id = db.Column(db.Integer, ForeignKey(Ask.id))
-    text = db.Column(db.String)
-    is_locker_code = db.Column(db.Boolean)
 
 
 class AskStates(enum.Enum):
@@ -52,8 +43,17 @@ class Ask(db.Model):
     status = db.Column(db.Enum(AskStates))
 
 
-class User(db.Model):
-    __tablename__ = "users"
-    email = db.Column(String)
-    phone = db.Column(String)
-    asks = db.relationship('asks', backref=backref('user'))
+class Note(db.Model):
+    __tablename__ = "notes"
+    id = db.Column(db.Integer, primary_key=True)
+    date_created = db.Column(DateTime, default=func.now())
+    ask_id = db.Column(db.Integer, ForeignKey(Ask.id))
+    text = db.Column(db.String)
+    is_locker_code = db.Column(db.Boolean)
+
+
+# class User(db.Model):
+#     __tablename__ = "users"
+#     email = db.Column(String)
+#     phone = db.Column(String)
+#     asks = db.relationship('asks', backref=backref('user'))

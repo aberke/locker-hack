@@ -1,0 +1,64 @@
+<!-- ask_buy.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Lockers &amp; Noise: ASK / BUY </title>
+
+    <style>
+      input:invalid {
+        background-image: linear-gradient(to right, yellow, lightgreen);
+
+      }
+      input:invalid:required {
+        background-image: linear-gradient(to right, yellow, pink);
+        border: 1px solid red;
+      }
+      input:valid {
+        background: yellow;
+        border: 1px solid lightgreen;
+      }
+    </style>
+  </head>
+  <body>
+    
+    <h1>
+      Hello
+    {% if name %}
+      {{ name }}!
+    {% else %}
+      World!
+    </h1>
+    {% endif %}
+
+      <form>
+        <label for="product-url">URL</label>
+        <input style="width: 80%; display: block;" placeholder="https://www.amazon.com/your-item-url/dp/product" type="url" id="product-url" name="product-url" required /><br />
+      
+      <button onclick="ask();" id='ask-btn' style="display: block;">submit</button>
+
+      Updated URL <a id="updated-url" href="">{{ new_url }}</a>
+    </form>
+
+  </body>
+
+  <script type="text/javascript">
+    function ask() {
+      var url = document.getElementById('product-url');
+      console.log('ask', url);
+
+    }
+
+    function validAsk(url) {
+      /*
+      Returns whether the clean part of the ask url if url is a valid ask.
+      */
+      return null;
+    }
+
+
+  </script>
+
+
+
+</html>

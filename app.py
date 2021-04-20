@@ -1,5 +1,15 @@
 from flask import Flask, request, render_template
+from flask_sqlalchemy import SQLAlchemy
+
+
 app = Flask(__name__)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///lockers.db'
+db = SQLAlchemy(app)
+
+from models import Locker, Ask
+
+
 
 
 @app.route('/')
@@ -8,14 +18,9 @@ def blog_redirect():
     return 'Hello, World!'
 
 
-@app.route('/hello')
-def hello_world():
-    return 'Hello, World!'
-
-
-@app.route('/ask-buy')
-def ask_buy():
-    return render_template('ask_buy.html')
+@app.route('/index')
+def index():
+    return render_template('index.html')
 
 
 # initial stuff above
@@ -26,7 +31,7 @@ def ask_buy():
 
 # go here
 
-@app.route('/ask/')
+@app.route('/ask')
 def ask():
     """
     Returns page for user to make a ask.
@@ -38,6 +43,16 @@ def ask():
 @app.route('/buy/<int:ask_id>/')
 def buy(ask_id):
     pass
+
+
+
+## Error handling
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # set the 404 status explicitly
+    return render_template('404.html'), 404
+
 
 
 # API
@@ -66,3 +81,5 @@ def api_ask(item_url):
 @app.route('/api/referal', methods=['POST'])
 def referral(url):
     # TODO
+    pass
+

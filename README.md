@@ -29,7 +29,12 @@ $ pip install -r requirements.txt
 
 $ source .env
 
-$ flask run
+# automatic reload on code changes
+$ export FLASK_DEBUG=1
 
+$ FLASK_ENV=development flask run
 
 ```
+
+http://127.0.0.1:5000/index
+
