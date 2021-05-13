@@ -5,6 +5,11 @@
   <head>
     <title>Lockers &amp; Noise: ASK / BUY </title>
 
+    <script type="text/javascript"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="/static/styles.css"> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='amazon.js') }}"></script>
+
     <style>
       input:invalid {
         background-image: linear-gradient(to right, yellow, lightgreen);
@@ -30,30 +35,30 @@
       World!
     </h1>
     {% endif %}
+    Do you want this? https://www.amazon.com/Amazon-Brand-Creamy-Peanut-Butter/dp/B07KWGSCW2
 
-      <form>
+      <!-- <form> -->
         <label for="product-url">URL</label>
-        <input style="width: 80%; display: block;" placeholder="https://www.amazon.com/your-item-url/dp/product" type="url" id="product-url" name="product-url" required /><br />
+        <input style="width: 80%; display: block;" placeholder="https://www.amazon.com/your-item-url/dp/product" type="url" id="product-url" name="product-url" required pattern="https?://.+" /><br />
       
-      <button onclick="ask();" id='ask-btn' style="display: block;">submit</button>
+      <button onclick="ask();" id='ask-btn' style="display: block;">ASK</button>
 
-      Updated URL <a id="updated-url" href="">{{ new_url }}</a>
-    </form>
+      Updated URL <a id="updated-url" href=""></a>
+    <!-- </form> -->
 
   </body>
 
   <script type="text/javascript">
     function ask() {
-      var url = document.getElementById('product-url');
-      console.log('ask', url);
+      const urlInput = document.getElementById('product-url');
+      const url = urlInput.value;
+      const affiliatesLink = getCleanAffiliatesLink(url);
+      if (!affiliatesLink) { console.log('invalid URL'); }
+      else if (!!affiliatesLink) {
+        document.getElementById('updated-url').innerHTML = affiliatesLink;
+        document.getElementById('updated-url').href = affiliatesLink;
+      }
 
-    }
-
-    function validAsk(url) {
-      /*
-      Returns whether the clean part of the ask url if url is a valid ask.
-      */
-      return null;
     }
 
 
@@ -62,3 +67,7 @@
 
 
 </html>
+
+
+
+
