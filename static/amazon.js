@@ -5,8 +5,6 @@ console.log('hello amazon');
 const associatesID = 'mutualsupply-20';
 const AmazonProductURLRegex = /https:\/\/www.amazon.com\/(([A-z0-9]|-)+\/)?(d|g)p\/([A-z0-9])+\/?/g;
 
-// const AmazonProductURLRegex = /https:\/\/www.amazon.com\/([A-z0-9]|-)+\/(d|g)p\/([A-z0-9])+\/?/g;
-
 
 function getCleanProductURL(url) {
 	let matched = url.match(AmazonProductURLRegex);
@@ -14,7 +12,7 @@ function getCleanProductURL(url) {
 	return matched[0];
 }
 function getCleanAffiliatesLink(url) {
-	cleanURL = getCleanProductURL(url);
+	let cleanURL = getCleanProductURL(url);
 	if (!cleanURL) return null;
 	return cleanURL + '?tag=' + associatesID;
 }
