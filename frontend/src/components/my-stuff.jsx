@@ -3,17 +3,12 @@ import React from "react";
 function MyStuff() {
   return (
     <div className="my-stuff">
-      <div class="container">
-        <div class="row align-items-center my-5">
-          <div class="col-lg-7">
-            <img
-              class="img-fluid rounded mb-4 mb-lg-0"
-              src="http://placehold.it/900x400"
-              alt=""
-            />
+      <div className="container">
+        <div className="row align-items-center my-5">
+          <div className="col-lg-7">
+            <h1 className="font-weight-light">My Stuff</h1>
           </div>
-          <div class="col-lg-5">
-            <h1 class="font-weight-light">My Stuff</h1>
+          <div className="col-lg-5">
             <p>
               TODO: A list of asks that this user has interacted with.
             </p>

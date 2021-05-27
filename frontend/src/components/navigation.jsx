@@ -4,47 +4,47 @@ import { Link, withRouter } from "react-router-dom";
 function Navigation(props) {
   return (
     <div className="navigation">
-      <nav class="navbar navbar-expand navbar-dark bg-dark">
-        <div class="container">
-          <Link class="navbar-brand" to="/">
+      <nav className="navbar navbar-expand navbar-dark bg-dark">
+        <div className="container">
+          <Link className="navbar-brand" to="/">
             Lockers &amp; Noise
           </Link>
 
           <div>
-            <ul class="navbar-nav ml-auto">
+            <ul className="navbar-nav ml-auto">
               <li
-                class={`nav-item  ${
+                className={`nav-item  ${
                   props.location.pathname === "/ask" ? "active" : ""
                 }`}
               >
-                <Link class="nav-link" to="/ask">
+                <Link className="nav-link" to="/ask">
                   ASK
                 </Link>
               </li>
               <li
-                class={`nav-item  ${
+                className={`nav-item  ${
                   props.location.pathname === "/buy" ? "active" : ""
                 }`}
               >
-                <Link class="nav-link" to="/buy">
+                <Link className="nav-link" to="/buy">
                   BUY
                 </Link>
               </li>
               <li
-                class={`nav-item  ${
+                className={`nav-item  ${
                   props.location.pathname === "/about" ? "active" : ""
                 }`}
               >
-                <Link class="nav-link" to="/about">
+                <Link className="nav-link" to="/about">
                   About
                 </Link>
               </li>
               <li
-                class={`nav-item  ${
+                className={`nav-item  ${
                   props.location.pathname === "/my-stuff" ? "active" : ""
                 }`}
               >
-                <Link class="nav-link" to="/my-stuff">
+                <Link className="nav-link" to="/my-stuff">
                   My Stuff
                 </Link>
               </li>
