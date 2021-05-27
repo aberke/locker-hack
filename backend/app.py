@@ -2,84 +2,55 @@ from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='./../frontend/public')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///lockers.db'
+app.config['SECRET_KEY'] = "change me to random string in env variable"
 db = SQLAlchemy(app)
+
 
 from models import Locker, Ask
 
 
-
-
-@app.route('/')
+@app.route('/blog')
 def blog_redirect():
-    # Todo
-    return 'Hello, World!'
-
-
-@app.route('/index')
-def index():
-    return render_template('index.html')
-
-
-# initial stuff above
-# mapped out   URLs below
-
-
-# User seen endpoints
-
-# go here
-
-@app.route('/ask')
-def ask():
-    """
-    Returns page for user to make a ask.
-    POSTs to /api/ask
-    """
-    return 'This is the page to make an ask'
-
-
-@app.route('/buy/<int:ask_id>/')
-def buy(ask_id):
-    pass
-
-
-
-## Error handling
-
-@app.errorhandler(404)
-def page_not_found(e):
-    # set the 404 status explicitly
-    return render_template('404.html'), 404
-
+    return 'Hello, World!' # Todo
 
 
 # API
 
-
 @app.route('/api/asks', methods=['GET'])
-def api_asks():
+def api_get_asks():
     """
     Returns all of the ask items, filtered to tags in the URL parameters
     """
-    pass
+    return {"asks": [{"TO":"DO"}, {"TO":"DO"}]}
+
+# GET ask
+@app.route('/api/ask/<int:id>', methods=['POST'])
+def api_get_ask(ask_id):
+    return 'TODO'
+
+# GET ask
+@app.route('/api/ask/<int:id>', methods=['DELETE'])
+def api_delete_ask(ask_id):
+    return 'TODO'
 
 
-# POST ask
-@app.route('/api/ask', methods=['GET', 'POST'])
-def api_ask(item_url):
-    if request.method == 'POST':
-        # TODO
-        # create or  update the ask object
-        return 'POST ASK'
-    else:
-        # return the ask object
-        return 'GET ASK'
+
+
+# POST new ask
+@app.route('/api/ask', methods=['POST'])
+def api_post_ask():
+    return 'TODO'
+
+
+
 
 
 @app.route('/api/referal', methods=['POST'])
 def referral(url):
     # TODO
+    # what was our plan here?
     pass
 

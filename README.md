@@ -44,19 +44,30 @@ $ source venv/bin/activate
 
 $ pip install -r requirements.txt
 
-# automatic reload on code changes
-$ export FLASK_DEBUG=1
-
-$ FLASK_ENV=development flask run
-
 ```
 
-http://127.0.0.1:5000/index
+http://127.0.0.1:5000/
 
 Frontend:
 ```
 $ cd frontend
 $ yarn start
 ```
+http://127.0.0.1:3000/
 
+To start backend:
+
+either from frontend directory
+```
+$ yarn start-api
+```
+or from backend directory
+```
+$ flask run
+```
+
+## It is set up
+
+http://127.0.0.1:3000/ is the front end and tunnels to the backend.
+http://127.0.0.1:3000/api/asks
 
