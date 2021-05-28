@@ -5,7 +5,7 @@ function Ask() {
 
 
   const associatesID = 'mutualsupply-20';
-  const AmazonProductURLRegex = /https:\/\/www.amazon.com\/(([A-z0-9]|-)+\/)?(d|g)p\/([A-z0-9])+\/?/g;
+  const AmazonProductURLRegex = /https:\/\/www.amazon.com\/(([A-z0-9]|-)+\/)?(d|g)p\/([A-z0-9])+\/?\/([A-z0-9])+\/?/g;
 
   function getCleanProductURL(url) {
     let matched = url.match(AmazonProductURLRegex);
@@ -15,7 +15,7 @@ function Ask() {
   function getCleanAffiliatesLink(url) {
     let cleanURL = getCleanProductURL(url);
     if (!cleanURL) return null;
-    return cleanURL + '?tag=' + associatesID;
+    return cleanURL + '?tag=' + associatesID + '&linkCode=ll1' + '&ref_=as_li_ss_tl';
   }
 
   function submitURL() {
@@ -51,7 +51,22 @@ function Ask() {
 
               Updated URL <a id="updated-url" target="_blank" href=""></a>
               </div>
-
+              <p>
+              TODO: and then make the iframe that shows the product and links to it with
+              our affiliates ID. Something like:
+              </p>
+              <iframe 
+                style={{width:"120px", height:"240px"}}
+                marginWidth="0" marginHeight="0" scrolling="no" frameBorder="0"
+                src="//ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&OneJS=1&Operation=GetAdHtml&MarketPlace=US&source=ac&ref=tf_til&ad_type=product_link&tracking_id=mutualsupply-20&marketplace=amazon&amp;region=US&placement=B0825TR4TK&asins=B0825TR4TK&linkId=43d5b9dedbb9ac53d31b4b96523cc07e&show_border=true&link_opens_in_new_window=true&price_color=333333&title_color=0066c0&bg_color=ffffff">
+              </iframe>
+              <p>How?</p>
+              <p>
+              Grab the ASIN, maybe do what they're doing:
+              https://github.com/fromdev/tools/blob/master/amazon-affiliate-link-maker.html
+              </p>
+              <p>See this:</p>
+              <p>https://tools.fromdev.com/amazon-affiliate-link-maker.html</p>
             </div>
           </div>
         </div>
