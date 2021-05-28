@@ -49,11 +49,5 @@ class Note(db.Model):
     date_created = db.Column(DateTime, default=func.now())
     ask_id = db.Column(db.Integer, ForeignKey(Ask.id))
     text = db.Column(db.String)
+    is_order_number = db.Column(db.Boolean)
     is_locker_code = db.Column(db.Boolean)
-
-
-# class User(db.Model):
-#     __tablename__ = "users"
-#     email = db.Column(String)
-#     phone = db.Column(String)
-#     asks = db.relationship('asks', backref=backref('user'))
