@@ -51,6 +51,8 @@ http://127.0.0.1:5000/
 Frontend:
 ```
 $ cd frontend
+// also do yarn install when pulling in new changes
+$ yarn install
 $ yarn start
 ```
 http://127.0.0.1:3000/
