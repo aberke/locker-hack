@@ -44,20 +44,30 @@ $ source venv/bin/activate
 
 $ pip install -r requirements.txt
 
+# set up database -- also do this when pulling in models changes
+$ flask db upgrade
+
 ```
 
-http://127.0.0.1:5000/
+
 
 Frontend:
 ```
 $ cd frontend
 // also do yarn install when pulling in new changes
 $ yarn install
+```
+
+## Run it
+Once it is set up
+
+Frontend:
+```
 $ yarn start
 ```
 http://127.0.0.1:3000/
 
-To start backend:
+Backend:
 
 either from frontend directory
 ```
@@ -67,9 +77,28 @@ or from backend directory
 ```
 $ flask run
 ```
-
-## It is set up
+http://127.0.0.1:5000/
 
 http://127.0.0.1:3000/ is the front end and tunnels to the backend.
 http://127.0.0.1:3000/api/asks
 
+
+## Database
+
+
+### Data Migrations
+
+Alembic is used to handle data migrations. Any update to models must go with a data migration.
+
+When commiting models change:
+
+```
+$ flask db migrate -m "message"
+```
+Review the automatically generated script in `migrations/`.
+
+Update database to match the change (can also downgrade)
+
+```
+$ flask db upgrade
+```
