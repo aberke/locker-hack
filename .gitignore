@@ -133,5 +133,5 @@ node_modules
 
 
 ## app specific
-lockers.db
+app.db
 

@@ -26,7 +26,7 @@ def blog_redirect():
 @app.route('/api/asks', methods=['GET'])
 def api_get_asks():
     """
-    Returns all of the ask items, filtered to tags in the URL parameters
+    Returns all of the ask items, filtered by the URL parameters.
     """
     return { "asks": [{"TO":"DO"}, {"TO":"DO"}] }, 200
 
@@ -63,9 +63,10 @@ def api_delete_ask(id):
 
 
 
-
-@app.route('/api/referal', methods=['POST'])
-def referral(url):
-    # TODO - and what was our plan here?
-    pass
-
+@app.shell_context_processor
+def make_shell_context():
+    """
+    Allows for flask shell interactions with database objects.
+    $ flask shell
+    """
+    return {'db': db, 'Locker': models.Locker, 'Ask':models.Ask, 'Note': models.Note}
