@@ -27,11 +27,7 @@ mutualsupply-20
 
 Clone the repo...
 
-```
-$ source .env
-```
-
-Backend:
+### Backend:
 
 ```
 $ cd backend
@@ -49,9 +45,8 @@ $ flask db upgrade
 
 ```
 
+### Frontend:
 
-
-Frontend:
 ```
 $ cd frontend
 // also do yarn install when pulling in new changes
@@ -61,13 +56,14 @@ $ yarn install
 ## Run it
 Once it is set up
 
-Frontend:
+### Frontend:
+
 ```
 $ yarn start
 ```
-http://127.0.0.1:3000/
+http://127.0.0.1:3000/ shows the front end state
 
-Backend:
+### Backend:
 
 either from frontend directory
 ```
@@ -90,7 +86,7 @@ http://127.0.0.1:3000/api/asks
 
 Alembic is used to handle data migrations. Any update to models must go with a data migration.
 
-When commiting models change:
+When committing models change:
 
 ```
 $ flask db migrate -m "message"
