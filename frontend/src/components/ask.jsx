@@ -44,20 +44,24 @@ const LockerSearchBar = ({ google, lat, lng }) => {
     event.preventDefault();
     getLockers();
   };
+  const StaticMarker = () => (
+    <Marker onClick={onMarkerClick} name={"Current location"} />
+  );
 
   const LockerMarkers = () => {
+      console.log(lockers[0])
     const markers = lockers.map((l) => {
       return (
         <Marker
           onClick={onMarkerClick}
           name={l.name}
           key={l.name}
-          position={l.geometry.location}
+          title={l.name}
+          position={l.geometry}
         />
       );
     });
-    console.log("markers:", markers);
-    return markers;
+    return markers
   };
 
   return (
@@ -66,10 +70,11 @@ const LockerSearchBar = ({ google, lat, lng }) => {
         <input type="submit" value="Submit" />
       </form>
 
-      <Map google={google} zoom={14}>
-        <LockerMarkers />
-        <Marker onClick={onMarkerClick} name={"Current location"} />
-      </Map>
+      {lockers.length == 0 ? null : (
+        <Map google={google} zoom={14} defaultCenter={lockers[0].geometry}>
+          {LockerMarkers()}
+        </Map>
+      )}
     </>
   );
 };
