@@ -9,7 +9,7 @@ function Ask() {
   console.log("hello amazon/world I have loaded");
 
   const associatesID = "mutualsupply-20";
-  const AmazonProductURLRegex = /https:\/\/www.amazon.com\/(([A-z0-9]|-)+\/)?(d|g)p\/?(([A-z0-9])+)[\?|\/]/g
+  const AmazonProductURLRegex = /https:\/\/www.amazon.com\/(([A-z0-9]|-)+\/)?(d|g)p\/?(([A-z0-9_-])+[\?|\/])?(([A-z0-9]){10}[\?|\/]?)/g
   const [userLink, setUserLink] = useState("");
   const [iframeLink, setIframeLink] = useState("");
   const [asin, setAsin] = useState("");
