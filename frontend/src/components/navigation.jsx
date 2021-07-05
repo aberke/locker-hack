@@ -1,54 +1,58 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
 
+const active = "bg-yellow rounded text-gray";
+
 function Navigation(props) {
   return (
     <div className="navigation">
-      <nav className="navbar navbar-expand navbar-dark bg-dark">
-        <div className="container">
-          <Link className="navbar-brand" to="/">
-            Lockers &amp; Noise
-          </Link>
+      <nav className="navbar navbar-expand navbar-dark border-b border-yellow">
+        <div className="container w-full flex flex-row justify-between">
+          <div class="flex flex-row justify-self-start flex-grow justify-start">
+            <Link className="text-gray border-b border-yellow align-self-center font-black font-mono" to="/">
+              Lockers &amp; Noise
+            </Link>
 
-          <div>
-            <ul className="navbar-nav ml-auto">
-              <li
-                className={`nav-item  ${
-                  props.location.pathname === "/ask" ? "active" : ""
+            <div className="flex flex-row font-black pl-10">
+              <div
+                className={`${
+                  props.location.pathname === "/ask" ? active : ""
                 }`}
               >
                 <Link className="nav-link" to="/ask">
                   ASK
                 </Link>
-              </li>
-              <li
+              </div>
+              <div
                 className={`nav-item  ${
-                  props.location.pathname === "/buy" ? "active" : ""
+                  props.location.pathname === "/buy" ? active : ""
                 }`}
               >
                 <Link className="nav-link" to="/buy">
                   BUY
                 </Link>
-              </li>
-              <li
+              </div>
+              <div
                 className={`nav-item  ${
-                  props.location.pathname === "/about" ? "active" : ""
+                  props.location.pathname === "/about" ? active : ""
                 }`}
               >
                 <Link className="nav-link" to="/about">
                   About
                 </Link>
-              </li>
-              <li
-                className={`nav-item  ${
-                  props.location.pathname === "/my-stuff" ? "active" : ""
-                }`}
-              >
-                <Link className="nav-link" to="/my-stuff">
-                  My Stuff
-                </Link>
-              </li>
-            </ul>
+              </div>
+            </div>
+          </div>
+          <div class="justify-self-end font-black">
+            <div
+              className={`nav-item  ${
+                props.location.pathname === "/my-stuff" ? active : ""
+              }`}
+            >
+              <Link className="nav-link" to="/my-stuff">
+                My Stuff
+              </Link>
+            </div>
           </div>
         </div>
       </nav>
