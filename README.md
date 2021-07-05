@@ -27,6 +27,7 @@ mutualsupply-20
 
 Clone the repo...
 
+
 ### Backend:
 
 ```
@@ -44,6 +45,14 @@ $ pip install -r requirements.txt
 $ flask db upgrade
 
 ```
+
+
+Get the environment variables from someone and put them in a `.env` file.
+
+```
+source .env
+```
+
 
 ### Frontend:
 
