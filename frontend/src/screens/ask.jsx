@@ -1,109 +1,12 @@
 import React, { useState } from "react";
-import fetch from "node-fetch";
-import { Map, InfoWindow, Marker, GoogleApiWrapper } from "google-maps-react";
-
-const API_KEY = "";
-
-const LockerSearchBar = ({ google, lat, lng }) => {
-  const [lockers, setLockers] = useState([]);
-  console.log(API_KEY);
-  console.log("lat and lng:", lat, lng);
-  const getLockers = async () => {
-    console.log("Getting Lockers...");
-    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?`;
-    const params = new URLSearchParams();
-    params.append("key", API_KEY);
-    params.append("keyword", "Amazon Locker");
-    params.append("location", `${lng},${lat}`);
-    params.append("rankby", "distance");
-
-    const resp = await fetch(url + params, {
-      headers: {},
-      // mode: "cors",
-      method: "GET",
-    });
-    console.log("Recieved Response: ", resp);
-    resp.json().then((obj) => {
-      setLockers(
-        obj.results.map((l) => {
-          return {
-            geometry: l.geometry.location,
-            name: l.name,
-            vicinity: l.vicinity,
-          };
-        })
-      );
-    });
-  };
-
-  const onMarkerClick = (e) => {
-    console.log("marker clicked:", e);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    getLockers();
-  };
-  const StaticMarker = () => (
-    <Marker onClick={onMarkerClick} name={"Current location"} />
-  );
-
-  const LockerMarkers = () => {
-      console.log(lockers[0])
-    const markers = lockers.map((l) => {
-      return (
-        <Marker
-          onClick={onMarkerClick}
-          name={l.name}
-          key={l.name}
-          title={l.name}
-          position={l.geometry}
-        />
-      );
-    });
-    return markers
-  };
-
-  return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <input type="submit" value="Submit" />
-      </form>
-
-      {lockers.length == 0 ? null : (
-        <Map google={google} zoom={14} defaultCenter={lockers[0].geometry}>
-          {LockerMarkers()}
-        </Map>
-      )}
-    </>
-  );
-};
-
-const MapContainer = (props) => {
-  const [placeName, setPlaceName] = useState("");
-  const onMarkerClick = () => {
-    console.log("marker click!");
-  };
-  const onInfoWindowClose = () => {
-    console.log("marker click!");
-  };
-
-  return (
-    <Map google={props.google} zoom={14}>
-      <Marker onClick={onMarkerClick} name={"Current location"} />
-
-      <InfoWindow onClose={onInfoWindowClose}></InfoWindow>
-    </Map>
-  );
-};
-
-const LockerMap = GoogleApiWrapper({ apiKey: API_KEY })(LockerSearchBar);
+import { LockerMapAsk } from "../components/LockerSearchBar";
 
 function Ask() {
   console.log("hello amazon/world I have loaded");
 
   const associatesID = "mutualsupply-20";
-  const AmazonProductURLRegex = /https:\/\/www.amazon.com\/(([A-z0-9]|-)+\/)?(d|g)p\/([A-z0-9])+\/?\/([A-z0-9])+\/?/g;
+  const AmazonProductURLRegex =
+    /https:\/\/www.amazon.com\/(([A-z0-9]|-)+\/)?(d|g)p\/([A-z0-9])+\/?\/([A-z0-9])+\/?/g;
 
   function getCleanProductURL(url) {
     let matched = url.match(AmazonProductURLRegex);
@@ -141,7 +44,7 @@ function Ask() {
               Do you want this?
               https://www.amazon.com/Amazon-Brand-Creamy-Peanut-Butter/dp/B07KWGSCW2
             </p>
-            <LockerMap lat={-71.1150457} lng={42.3158227} />
+            <LockerMapAsk />
             <p>Or this? https://www.amazon.com/gp/product/B00F6MFM3C/</p>
             <div>
               <label>URL</label>
