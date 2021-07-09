@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import FlatList from "flatlist-react";
 import fetch from "node-fetch";
 import LockerPins from "./LockerPins";
@@ -100,7 +100,7 @@ const LockerList = ({ lockers, selectedLocker, onLockerClicked }) => {
 
 const API_KEY = process.env.REACT_APP_GOOGLE_PLACES_API_KEY;
 
-const LockerSearchBar = ({ google }) => {
+const LockerSearchBar = ({ onSelectLocker }) => {
   const [lockers, setLockers] = useState([]);
   const [zipCode, setZipCode] = useState("");
   const [clickedLocker, setClickedLocker] = useState();
@@ -215,6 +215,16 @@ const LockerSearchBar = ({ google }) => {
             />
           </div>
         </div>
+      )}
+      {clickedLocker !== undefined ? (
+        <button
+          className="m-2 m-5 p-2 text-lg text-white bg-black font-bold rounded-lg"
+          onClick={() => onSelectLocker(clickedLocker)}
+        >
+          Select This Locker
+        </button>
+      ) : (
+        <></>
       )}
     </div>
   );
