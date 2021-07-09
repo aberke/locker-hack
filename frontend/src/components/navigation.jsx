@@ -8,7 +8,7 @@ function Navigation(props) {
     <div className="navigation">
       <nav className="navbar navbar-expand navbar-dark border-b border-yellow">
         <div className="container w-full flex flex-row justify-between">
-          <div class="flex flex-row justify-self-start flex-grow justify-start">
+          <div className="flex flex-row justify-self-start flex-grow justify-start">
             <Link className="text-gray border-b border-yellow align-self-center font-black font-mono" to="/">
               Lockers &amp; Noise
             </Link>
@@ -43,7 +43,7 @@ function Navigation(props) {
               </div>
             </div>
           </div>
-          <div class="justify-self-end font-black">
+          <div className="justify-self-end font-black">
             <div
               className={`nav-item  ${
                 props.location.pathname === "/my-stuff" ? active : ""
