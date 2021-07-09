@@ -24,7 +24,7 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "start-api": "cd ../backend && venv/bin/flask run --no-debugger",
+    "start-api": "cd ../backend && flask run --no-debugger",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

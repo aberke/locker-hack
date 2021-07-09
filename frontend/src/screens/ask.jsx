@@ -18,7 +18,6 @@ function Ask() {
   const getCleanProductURL = (url) => {
     console.log("Getting cleaned product url:", url);
     let matched = url.match(AmazonProductURLRegex);
-    console.log("matched?", matched);
     if (!matched) return null;
     return matched[0];
   };
@@ -30,11 +29,9 @@ function Ask() {
   };
 
   const extractASIN = (url) => {
-    console.log("Extracting ASIN from url:", url);
     var m = url.match(ASINRegex);
     if (m) {
       const asin = m[0].replace(new RegExp("/|\\?", "g"), "");
-      console.log("Extracted ASIN:", asin);
       setAsin(asin);
       return asin;
     }
