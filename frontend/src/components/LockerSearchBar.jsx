@@ -7,7 +7,6 @@ import ReactMapGL, { Popup } from "react-map-gl";
 const LockerInfo = (props) => {
   const { name, vicinity } = props.info;
   const addressItems = vicinity.replace("at ", "").split(",");
-  console.log("PROPS:", props);
   return (
     <div className="flex-col flex">
       <div className="flex-row p-1 text-base font-bold border-b">{name}</div>
@@ -20,13 +19,13 @@ const LockerInfo = (props) => {
   );
 };
 
-const LockerMap = ({ lockers, selectedLocker, onLockerClicked }) => {
+export const LockerMap = ({ lockers, selectedLocker, onLockerClicked, showPopup=false, zoom=11}) => {
   const [popupInfo, setPopupInfo] = useState();
   // default that really never gets used.
   const [viewport, setViewport] = useState({
     latitude: 37.7577,
     longitude: -122.4376,
-    zoom: 11,
+    zoom: zoom,
   });
 
   useEffect(() => {
@@ -52,7 +51,7 @@ const LockerMap = ({ lockers, selectedLocker, onLockerClicked }) => {
       mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
     >
       <LockerPins lockers={lockers} onLockerClicked={onLockerClicked} />
-      {popupInfo && (
+      {(popupInfo && showPopup) && (
         <Popup
           tipSize={5}
           anchor="top"
@@ -142,6 +141,7 @@ const LockerSearchBar = ({ onSelectLocker }) => {
     console.log("Zip code lat lng:", latLng);
     params.append("key", API_KEY);
     params.append("keyword", "Amazon Locker");
+    params.append("fields", "formatted_address,geometry,icon,photos")
     params.append("location", `${latLng.lat},${latLng.lng}`);
     params.append("rankby", "distance");
 
@@ -150,11 +150,13 @@ const LockerSearchBar = ({ onSelectLocker }) => {
       method: "GET",
     });
     resp.json().then((obj) => {
+      console.log(obj.results)
       setLockers(
         obj.results.map((l) => {
           return {
             geometry: l.geometry.location,
             name: l.name,
+            google_place_id: l.place_id,
             vicinity: l.vicinity,
           };
         })
@@ -205,6 +207,7 @@ const LockerSearchBar = ({ onSelectLocker }) => {
               lockers={lockers}
               selectedLocker={clickedLocker}
               onLockerClicked={onLockerClick}
+              showPopup={true}
             />
           </div>
           <div className="h-full w-1/3 overflow-scroll">
