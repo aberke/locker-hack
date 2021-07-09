@@ -1,7 +1,9 @@
 # Good resource to build this out:
 # https://blog.miguelgrinberg.com/post/how-to-create-a-react--flask-project
 
-from flask import Flask
+from flask import Flask, jsonify
+from werkzeug.http import HTTP_STATUS_CODES
+
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -13,7 +15,7 @@ migrate = Migrate(app, db)
 
 
 
-import models
+from models import Ask, Note
 
 
 @app.route('/blog')
@@ -28,7 +30,9 @@ def api_get_asks():
     """
     Returns all of the ask items, filtered by the URL parameters.
     """
-    return { "asks": [{"TO":"DO"}, {"TO":"DO"}] }, 200
+    # TODO: query for asks by parameters
+    asks = Ask.query.order_by(Ask.created.asc()).all()
+    return jsonify({"asks": [ask.to_dict() for ask in asks]})
 
 
 # POST new ask
@@ -40,7 +44,7 @@ def api_post_ask():
 # GET ask
 @app.route('/api/ask/<int:id>', methods=['GET'])
 def api_get_ask(id):
-    return 'TODO', 200
+    return jsonify(Ask.query.get_or_404(id).to_dict())
 
 
 # POST ask
@@ -69,4 +73,7 @@ def make_shell_context():
     Allows for flask shell interactions with database objects.
     $ flask shell
     """
-    return {'db': db, 'Locker': models.Locker, 'Ask':models.Ask, 'Note': models.Note}
+    return {'db': db, 'Ask': Ask, 'Note': Note}
+
+if __name__ == "__main__":
+    app.run()
