@@ -3,13 +3,13 @@ import { LockerMapAsk } from "../components/LockerSearchBar";
 
 // TODO: remove amazon related helper functions to separate module
 const associatesID = "mutualsupply-20";
-var ASINRegex = new RegExp("\/([a-zA-Z0-9]{10})")
+var ASINRegex = new RegExp("/([a-zA-Z0-9]{10})");
 
 function Ask() {
   console.log("hello amazon/world I have loaded");
 
   const associatesID = "mutualsupply-20";
-  const AmazonProductURLRegex = /https:\/\/www.amazon.com\/(([A-z0-9]|-)+\/)?(d|g)p\/?(([A-z0-9_-])+[\?|\/])?(([A-z0-9]){10}[\?|\/]?)/g
+  const AmazonProductURLRegex = /https:\/\/www.amazon.com\/(([A-z0-9]|-)+\/)?(d|g)p\/?(([A-z0-9_-])+[\?|\/])?(([A-z0-9]){10}[\?|\/]?)/g;
   const [userLink, setUserLink] = useState("");
   const [iframeLink, setIframeLink] = useState("");
   const [asin, setAsin] = useState("");
@@ -54,7 +54,7 @@ function Ask() {
 
   const handleSubmit = () => {
     const url = getCleanProductURL(userLink);
-    const extractedAsin= extractASIN(url);
+    const extractedAsin = extractASIN(url);
     setIframeLink(makeAmazonProductTextImageIframeLink(extractedAsin));
     const affiliatesLink = getCleanAffiliatesLink(url);
     if (!affiliatesLink) {
@@ -69,10 +69,10 @@ function Ask() {
   };
 
   return (
-    <div className="ask">
-      <div className="container">
-        <div className="row align-items-center my-5">
-          <div className="col-lg-5">
+    <div>
+      <div className="container flex-col w-full items-center">
+        <div className="row items-center justify-center my-5">
+          <div className="col-lg-10">
             <h1 className="font-weight-light">just ASK</h1>
             <p>
               Do you want this?
@@ -101,6 +101,7 @@ function Ask() {
             </div>
 
             <iframe
+              title="product-iframe"
               width="120px"
               height="240px"
               marginWidth="0"
