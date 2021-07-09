@@ -63,7 +63,6 @@ Once it is set up
 ### Frontend:
 
 ```
-$ source .env
 $ yarn start
 ```
 http://127.0.0.1:3000/ shows the front end state
@@ -116,8 +115,6 @@ $ flask db upgrade
 
 #### ASK
 
-Lockers are created in DB by users making asks
-
 User makes a new ask.
 
 client --> Google places API: search for lockers within zipcode.
@@ -147,8 +144,3 @@ GET asks:
 	- locker_place_ids: [locker_place_id],
 	- limit: int
 }
-
-
-
-## TODO(alex) 
-- database migration

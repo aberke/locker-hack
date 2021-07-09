@@ -4,8 +4,6 @@ import os
 from datetime import datetime
 
 import enum
-from geoalchemy2 import Geometry
-# from geoalchemy2.types import Geometry
 from sqlalchemy.orm import backref, relationship
 
 from app import db
