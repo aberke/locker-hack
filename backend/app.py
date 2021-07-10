@@ -15,6 +15,8 @@ migrate = Migrate(app, db)
 
 from errors import bad_request
 from models import Ask, Note
+import notifications
+import util
 
 
 @app.route('/blog')
@@ -47,34 +49,61 @@ def api_post_ask():
     if not all(r in data for r in required_fields):
         return bad_request('must include ' + ', '.join(required_fields) + ' fields')
     ask = Ask()
-    fields = [
-        'item_url', 'item_name', 'item_asin', 'quantity', 'price',
-        'locker_place_id', 'code'
-    ]
-    for field in fields:
+    for field in required_fields + ['item_url', 'item_name', 'quantity', 'price']:
         if field in data:
             setattr(ask, field, data[field])
-    asker_email = data['asker_email'] if 'asker_email' in data else None
-    if asker_email is not None and 'save_email' in data and data['save_email']:
-        ask.asker_email = asker_email
     db.session.add(ask)
     if 'note' in data:
         db.session.add(Note(text=data['note'], ask=ask))
     db.session.commit()
-    ask_url = url_for('api_get_ask', id=ask.id) + '?code=' + ask.code
-    if asker_email is not None:
-        print('TODO: send email (via flask-mail?) to asker_email with url %s' % ask_url)
+    ask_url = util.get_ask_with_code(ask)
     response = jsonify(ask.to_dict())
     response.headers['Location'] = ask_url
     return response, 201
 
 
-@app.route('/api/ask/<int:id>', methods=['GET'])
-def api_get_ask(id):
+@app.route('/api/ask/<int:ask_id>/asker_email', methods=['POST', 'PUT'])
+def api_post_asker_email(ask_id):
+    """
+    PUT/POST email for asker
+    """
+    ask = Ask.query.get_or_404(ask_id)
+    data = request.get_json() or {}
+    if 'asker_email' not in data:
+        return bad_request('request must include asker_email field')
+    asker_email = data['asker_email']
+    if 'save_email' in data and data['save_email']:
+        ask.asker_email = asker_email
+        db.session.add(ask)
+        db.session.commit()
+    notifications.email_asker_remember_url(ask, asker_email)
+    return 'success', 200
+
+
+@app.route('/api/ask/<int:ask_id>/buyer_email', methods=['POST', 'PUT'])
+def api_post_buyer_email(ask_id):
+    """
+    PUT/POST email for buyer
+    """
+    ask = Ask.query.get_or_404(ask_id)
+    data = request.get_json() or {}
+    if 'buyer_email' not in data:
+        return bad_request('request must include buyer_email field')
+    asker_email = data['asker_email']
+    if 'save_email' in data and data['save_email']:
+        ask.buyer_email = buyer_email
+        db.session.add(ask)
+        db.session.commit()
+    notifications.email_buyer_remember_url(ask, buyer_email)
+    return 'success', 200
+
+
+@app.route('/api/ask/<int:ask_id>', methods=['GET'])
+def api_get_ask(ask_id):
     """
     GET ask by id
     """
-    return jsonify(Ask.query.get_or_404(id).to_dict())
+    return jsonify(Ask.query.get_or_404(ask_id).to_dict())
 
 
 @app.route('/api/ask/<int:ask_id>/note', methods=['POST'])
