@@ -180,7 +180,7 @@ const LockerSearchBar = ({ onSelectLocker }) => {
   return (
     <div className="flex-col flex justify-start items-center">
       <p className="text-lg font-bold p-2">
-        Enter your zip code to find a Locker
+        Enter a zip code to find a Locker
       </p>
       <form
         className="flex-row flex space-around justify-center pb-10"

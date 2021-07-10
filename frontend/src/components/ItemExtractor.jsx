@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 
-// TODO: remove amazon related helper functions to separate module
-const associatesID = "mutualsupply-20";
-var ASINRegex = new RegExp("/([a-zA-Z0-9]{10})");
+
 
 const ItemInputAndPreview = (props) => {
-  const { setItemLink } = props;
+  const { setASIN } = props;
 
   const associatesID = "mutualsupply-20";
+  const ASINRegex = new RegExp("/([a-zA-Z0-9]{10})");
   const AmazonProductURLRegex =
     /https:\/\/www.amazon.com\/(([A-z0-9]|-)+\/)?(d|g)p\/?(([A-z0-9_-])+[\?|\/])?(([A-z0-9]){10}[\?|\/]?)/g;
 
@@ -17,11 +16,10 @@ const ItemInputAndPreview = (props) => {
   const [affiliatesLink, setAffiliatesLink] = useState("");
 
   useEffect(() => {
-    setItemLink(affiliatesLink);
-  }, [affiliatesLink]);
+    setASIN(asin);
+  }, [asin]);
 
   const getCleanProductURL = (url) => {
-    console.log("Getting cleaned product url:", url);
     let matched = url.match(AmazonProductURLRegex);
     if (!matched) return null;
     return matched[0];
@@ -48,9 +46,10 @@ const ItemInputAndPreview = (props) => {
     link +=
       "ServiceVersion=20070822&OneJS=1&Operation=GetAdHtml&MarketPlace=US&source=ss&ref=as_ss_li_til&ad_type=product_link";
     link +=
-      "&tracking_id=mutualsupply-20&language=en_US&marketplace=amazon&region=US";
+      "&language=en_US&marketplace=amazon&region=US";
     // link += "&placement=B0045TQLEG";
     link += "&asins=" + asin;
+    link += "&tracking_id=" + associatesID;
     // can style it and stuff
     link += "&show_border=false";
     link += "&link_opens_in_new_window=true";
@@ -66,6 +65,7 @@ const ItemInputAndPreview = (props) => {
       console.log("invalid URL");
     } else if (!!affiliatesLink) {
       setAffiliatesLink(affiliatesLink);
+      setASIN(extractASIN);
     }
   };
 
@@ -86,8 +86,11 @@ const ItemInputAndPreview = (props) => {
           required
           pattern="https?://.+"
         />
-        <button onClick={handleSubmit} id="ask-btn">
-          ASK
+        <button 
+          onClick={handleSubmit} 
+          className="m-5 p-2 text-lg text-white bg-black font-bold rounded-xl"
+          id="ask-btn">
+          FIND
         </button>
         Updated URL{" "}
         <a id="updated-url" target="_blank" href={affiliatesLink}>

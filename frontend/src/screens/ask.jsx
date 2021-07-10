@@ -8,6 +8,12 @@ function Ask() {
   const [selectedLocker, setSelectedLocker] = useState(null);
   const [lockerConfirmed, setLockerConfirmed] = useState(false);
   const [affiliatesLink, setAffiliatesLink] = useState("");
+  const [itemASIN, setItemASIN] = useState("");
+  const [note, setNote] = useState("");
+
+  const handleSubmitAsk = () => {
+    console.log("POST ASK");
+  }
 
   return (
     <div>
@@ -65,12 +71,32 @@ function Ask() {
               </div>
             )}
             {lockerConfirmed ? (
-              <ItemExtractor setItemLink={(l) => setAffiliatesLink(l)} />
+              <ItemExtractor setASIN={(asin) => setItemASIN(asin)} />
             ) : null}
-
-            <br />
-            <br />
-            <br />
+            {itemASIN ? (
+              <div className="ask-note-container">
+                <h4>ADD A NOTE</h4>
+                <p>Optionally add a note for the person who might buy this for you.</p>
+                <textarea
+                  className="note-input"
+                  name="note"
+                  value={note}
+                  label="note"
+                  onChange={(e) => setNote(e.target.value)}
+                />
+              </div>
+            ): null}
+            {itemASIN && lockerConfirmed ? (
+              <div>
+                <p>Review your ASK...</p>
+                <button
+                  onClick={() => handleSubmitAsk()}
+                  className="m-5 p-2 text-lg text-white bg-black font-bold rounded-xl submit-btn" 
+                >
+                  Submit
+                </button>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
