@@ -46,15 +46,10 @@ $ flask db upgrade
 
 ```
 
-
-Get the environment variables from someone and put them in a `.env` file.
-
-```
-source .env
-```
-
-
 ### Frontend:
+
+Get the environment variables from someone and put them in file `./frontend/.env`.
+
 
 ```
 $ cd frontend
@@ -91,6 +86,11 @@ http://127.0.0.1:3000/api/asks
 ## Database
 
 
+Useful tool when debugging:
+```
+$ flask shell
+```
+
 ### Data Migrations
 
 Alembic is used to handle data migrations. Any update to models must go with a data migration.
@@ -107,3 +107,40 @@ Update database to match the change (can also downgrade)
 ```
 $ flask db upgrade
 ```
+
+
+
+### Lockers and ask flow
+
+
+#### ASK
+
+User makes a new ask.
+
+client --> Google places API: search for lockers within zipcode.
+
+Googles places API returns lockers. User selects locker.
+
+POST ask: client --> server
+
+ask {
+
+	- all the ask info...
+	- locker_place_id
+
+}
+
+All locker location info is wrapped up in the Google Place IDs.
+All location info is handled by Google Places API requests
+
+
+#### VIEW/BUY for ASKs
+
+GET asks: 
+- user puts in location (zipcode) to front end
+- client --> Google Places API: get nearby places IDs for Amazon lockers
+- client --> server GET asks {
+
+	- locker_place_ids: [locker_place_id],
+	- limit: int
+}

@@ -3,7 +3,6 @@ click==7.1.2
 Flask==1.1.2
 Flask-Migrate==3.0.0
 Flask-SQLAlchemy==2.5.1
-GeoAlchemy2==0.8.5
 greenlet==1.0.0
 importlib-metadata==4.3.0
 itsdangerous==1.1.0
