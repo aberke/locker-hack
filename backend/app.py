@@ -56,7 +56,7 @@ def api_post_ask():
     if 'note' in data:
         db.session.add(Note(text=data['note'], ask=ask))
     db.session.commit()
-    ask_url = util.get_ask_with_code(ask)
+    ask_url = util.get_ask_url_with_code(ask)
     response = jsonify(ask.to_dict())
     response.headers['Location'] = ask_url
     return response, 201
