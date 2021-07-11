@@ -46,8 +46,11 @@ function NewAsk() {
     try {
       await postAsk(askData)
         .then((obj) => {
-          setAskId(obj.id);
+          const askId = obj.id;
+          setAskId(askId);
           console.log('successfully created ask.', obj);
+          // TODO: change this to only save this data if user opts in
+          AskCookieManager.storeAsk(askId, code) 
       });
     } catch (e) {
       console.log(`POST failed! ${e.message}`);
