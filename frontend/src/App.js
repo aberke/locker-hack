@@ -2,7 +2,7 @@ import './App.css';
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Navigation, Footer, Home, About, MyStuff } from "./components";
-import { Ask } from './screens'
+import { NewAsk } from './screens'
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
         <Navigation />
         <Switch>
           <Route exact path="/" component={() => <Home />} />
-          <Route path="/ask" exact component={() => <Ask />} />
+          <Route path="/ask" exact component={() => <NewAsk />} />
           <Route path="/about" exact component={() => <About />} />
           <Route path="/my-stuff" exact component={() => <MyStuff />} />
         </Switch>

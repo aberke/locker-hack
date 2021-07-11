@@ -6,9 +6,9 @@ export const AskCookieManager = {
 		// Gets a code already stored in the local browser cookies to reuse
 		// Or generates a new one.
 		// codes are 4 characters.
-    	const codeLength = 4;
-    	const code = Array.from(Array(codeLength), () => Math.floor(Math.random() * 36).toString(36)).join('');
- 		return code;
+		const codeLength = 4;
+		const code = Array.from(Array(codeLength), () => Math.floor(Math.random() * 36).toString(36)).join('');
+		return code;
 	},
 
 	storeAsk: (askId, code) => {

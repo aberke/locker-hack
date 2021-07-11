@@ -6,7 +6,7 @@ import { AskCookieManager, AskUrlManager } from "../helpers/AskManager";
 
 
 const SIZE = 50;
-function Ask() {
+function NewAsk() {
   const [selectedLocker, setSelectedLocker] = useState(null);
   const [lockerConfirmed, setLockerConfirmed] = useState(false);
   const [itemAffiliatesLink, setItemAffiliatesLink] = useState("");
@@ -160,4 +160,4 @@ function Ask() {
   );
 }
 
-export default Ask;
+export default NewAsk;
