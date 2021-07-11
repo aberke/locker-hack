@@ -11,10 +11,9 @@ function Ask() {
   const [itemAffiliatesLink, setItemAffiliatesLink] = useState("");
   const [itemAsin, setItemAsin] = useState("");
   const [note, setNote] = useState("");
+  const [code, setCode] = useState("");
 
-  const handleSubmitAsk = () => {
-    console.log("POST ASK", 'check for code in cookies or create one')
-    let code = "TODO";
+  const postAsk = async () => {
     let body = JSON.stringify({
       code: code,
       locker_place_id: selectedLocker.google_place_id,
@@ -22,12 +21,34 @@ function Ask() {
       item_asin: itemAsin,
       item_url: itemAffiliatesLink,
     });
-    console.log('body', body);
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: body,
     };
+    console.log('POST-ing ask', body)
+    const response = await fetch('/api/ask', requestOptions);
+    if (response.status !== 201) {
+      throw new Error(`Request failed: ${response.status}`); 
+    }
+    console.log('response', response)
+    return response.json().then((obj) => { return obj });
+  }
+
+  const handleSubmitAsk = async (event) => {
+    event.preventDefault(); // Prevent default submission
+    console.log("POST ASK", 'check for code in cookies or create one')
+    let code = "TODO";
+    setCode(code);
+    try {
+      await postAsk()
+        .then((obj) => {
+        console.log('successfully created ask. obj', obj);
+        console.log('TODO: do what is next')
+      });
+    } catch (e) {
+      alert(`Registration failed! ${e.message}`);
+    }
   }
 
   return (
@@ -108,7 +129,7 @@ function Ask() {
                     <div>
                       <p>Review your ASK...</p>
                       <button
-                        onClick={() => handleSubmitAsk()}
+                        onClick={handleSubmitAsk}
                         className="m-5 p-2 text-lg text-white bg-black font-bold rounded-xl submit-btn" 
                       >
                         Submit
