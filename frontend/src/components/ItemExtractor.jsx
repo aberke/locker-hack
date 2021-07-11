@@ -3,10 +3,10 @@ import React, { useEffect, useState } from "react";
 
 
 const ItemInputAndPreview = (props) => {
-  const { setASIN } = props;
+  const { setItemAsin, setItemAffiliatesLink } = props;
 
   const associatesID = "mutualsupply-20";
-  const ASINRegex = new RegExp("/([a-zA-Z0-9]{10})");
+  const AsinRegex = new RegExp("/([a-zA-Z0-9]{10})");
   const AmazonProductURLRegex =
     /https:\/\/www.amazon.com\/(([A-z0-9]|-)+\/)?(d|g)p\/?(([A-z0-9_-])+[\?|\/])?(([A-z0-9]){10}[\?|\/]?)/g;
 
@@ -16,8 +16,9 @@ const ItemInputAndPreview = (props) => {
   const [affiliatesLink, setAffiliatesLink] = useState("");
 
   useEffect(() => {
-    setASIN(asin);
-  }, [asin]);
+    setItemAsin(asin);
+    setItemAffiliatesLink(affiliatesLink);
+  }, [asin, affiliatesLink]);
 
   const getCleanProductURL = (url) => {
     let matched = url.match(AmazonProductURLRegex);
@@ -31,8 +32,8 @@ const ItemInputAndPreview = (props) => {
     return cleanURL + "?tag=" + associatesID;
   };
 
-  const extractASIN = (url) => {
-    var m = url.match(ASINRegex);
+  const extractAsin = (url) => {
+    let m = url.match(AsinRegex);
     if (m) {
       const asin = m[0].replace(new RegExp("/|\\?", "g"), "");
       setAsin(asin);
@@ -51,30 +52,30 @@ const ItemInputAndPreview = (props) => {
     link += "&asins=" + asin;
     link += "&tracking_id=" + associatesID;
     // can style it and stuff
-    link += "&show_border=false";
+    link += "&show_border=true";
     link += "&link_opens_in_new_window=true";
     return link;
   };
 
   const handleSubmit = () => {
     const url = getCleanProductURL(userLink);
-    const extractedAsin = extractASIN(url);
+    const extractedAsin = extractAsin(url);
     setIframeLink(makeAmazonProductTextImageIframeLink(extractedAsin));
     const affiliatesLink = getCleanAffiliatesLink(url);
-    if (!affiliatesLink) {
-      console.log("invalid URL");
-    } else if (!!affiliatesLink) {
-      setAffiliatesLink(affiliatesLink);
-      setASIN(extractASIN);
-    }
+    if (!affiliatesLink)
+      return console.log("invalid URL - could not create affiliatesLink", url);
+    if (!extractedAsin)
+      return console.log("invalid URL - could not extract ASIN", url);
+    setAffiliatesLink(affiliatesLink);
+    setAsin(extractedAsin);
   };
 
-  const isValidASIN = (input) => {
-    return input && input.length === 10 && ASINRegex.test(input);
+  const isValidAsin = (input) => {
+    return input && input.length === 10 && AsinRegex.test(input);
   };
 
   return (
-    <div>
+    <div style={{marginBottom: "50px"}}>
       <div>
         <label>URL</label>
         <input
@@ -92,22 +93,23 @@ const ItemInputAndPreview = (props) => {
           id="ask-btn">
           FIND
         </button>
-        Updated URL{" "}
-        <a id="updated-url" target="_blank" href={affiliatesLink}>
-          {affiliatesLink}
-        </a>
+        <div>
+          <a id="updated-url" target="_blank" href={affiliatesLink}>
+            {affiliatesLink}
+          </a>
+          <iframe
+            style={{margin:"auto"}}
+            title="product-iframe"
+            width="120px"
+            height="240px"
+            marginWidth="0"
+            marginHeight="0"
+            scrolling="no"
+            frameBorder="0"
+            src={iframeLink}
+          ></iframe>
+        </div>
       </div>
-
-      <iframe
-        title="product-iframe"
-        width="120px"
-        height="240px"
-        marginWidth="0"
-        marginHeight="0"
-        scrolling="no"
-        frameBorder="0"
-        src={iframeLink}
-      ></iframe>
     </div>
   );
 };

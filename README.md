@@ -109,7 +109,6 @@ $ flask db upgrade
 ```
 
 
-
 ### Lockers and ask flow
 
 
@@ -144,3 +143,12 @@ GET asks:
 	- locker_place_ids: [locker_place_id],
 	- limit: int
 }
+
+
+## TODOs
+
+ask.jsx -> newAsk.jsx
+
+POST
+
+email entry form
