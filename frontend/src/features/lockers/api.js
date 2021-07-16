@@ -14,10 +14,15 @@ export const getLockersNearLatLng = async (latLng) => {
 };
 
 export const getLockerInfoFromPlaceId = async (placeId) => {
-  return getPlaceInfo({ placeId })
+  return getPlaceInfo(placeId)
     .then((obj) => {
-      console.log("locker info:", obj);
-      return obj;
+      const l = obj.result;
+      return {
+        geometry: l.geometry.location,
+        name: l.name,
+        google_place_id: l.place_id,
+        vicinity: l.vicinity,
+      };
     })
     .catch((err) => {
       console.log("whoops", err);

@@ -40,7 +40,10 @@ export default ({
       onViewportChange={setViewport}
       mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
     >
-      <LockerPins lockers={lockers} onLockerClicked={onLockerClicked} />
+      <LockerPins
+        lockers={lockers}
+        onLockerClicked={onLockerClicked ? onLockerClicked : () => null}
+      />
       {popupInfo && showPopup && (
         <Popup
           tipSize={5}

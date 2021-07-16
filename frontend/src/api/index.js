@@ -1,3 +1,5 @@
+import { getLockerInfoFromPlaceId } from "../features/lockers/api";
+
 export const postAsk = async (askData) => {
   // Post an ask to our server with `askData`:
   // code: Ask code
@@ -12,7 +14,7 @@ export const postAsk = async (askData) => {
     body: body,
   };
   const response = await fetch("/api/ask", requestOptions);
-  
+
   if (response.status !== 201) {
     throw new Error(`Request failed: ${response.status}`);
   }
@@ -30,5 +32,19 @@ export const getAsks = async () => {
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
-  return response.json();
+
+  return response.json().then(async (data) => {
+    // Get Locker info as well, and attach it to ask object
+    const lockerInfo = await Promise.all(
+      data.asks.map((a) => getLockerInfoFromPlaceId(a.locker_place_id))
+    );
+    const newAsks = data.asks.map((ask, i) => {
+      return {
+        ...ask,
+        locker: lockerInfo[i],
+      };
+    });
+    console.log("new asks:", newAsks);
+    return newAsks;
+  });
 };

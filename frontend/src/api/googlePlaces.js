@@ -51,10 +51,15 @@ export const getNearbyPlaces = async ({ latLng, keyword }) => {
 
 export const getPlaceInfo = async (googlePlaceId) => {
   // Get the place details from the Google Places API.
-  const url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${googlePlaceId}&key=${process.env.REACT_APP_GOOGLE_PLACES_API_KEY}`;
-  const response = await fetch(url);
-  const json = await response.json();
-
-  console.log("got place info result:", json);
-  return json
+  console.log("google place ID:", googlePlaceId);
+  const url = "https://maps.googleapis.com/maps/api/place/details/json?";
+  const params = new URLSearchParams();
+  params.append("key", API_KEY);
+  params.append("place_id", googlePlaceId);
+  params.append("fields", "address_component,name,geometry");
+  const resp = await fetch(url + params, {
+    headers: {},
+    method: "GET",
+  });
+  return resp.json();
 };
