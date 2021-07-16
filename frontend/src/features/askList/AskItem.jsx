@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ItemIframe from "../item/ItemIframe";
 import moment from "moment";
+import LockerMap from "../../features/lockers/LockerMap";
 
 export default ({ ask }) => {
   // ask:
@@ -25,6 +26,15 @@ export default ({ ask }) => {
       </div>
       <div className="flex flex-row w-full items-center justify-start">
         <ItemIframe asin={ask.item_asin} />
+        <div className="flex-shrink w-64 h-64 m-3">
+          {ask.locker && (
+            <LockerMap
+              lockers={[ask.locker]}
+              selectedLocker={ask.locker}
+              zoom={15}
+            ></LockerMap>
+          )}
+        </div>
       </div>
     </div>
   );

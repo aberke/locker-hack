@@ -7,19 +7,12 @@ import { getLockerInfoFromPlaceId } from "../lockers/api";
 
 export default () => {
   const asks = useQuery("asks", getAsks, {
-    select: (d) => d.asks,
     onSuccess: (data) => {
-      data.forEach(() => {
-        console.log(
-          "locker info:",
-          getLockerInfoFromPlaceId(data.locker_place_id)
-        );
-      });
+      console.log("lockers", data);
     },
   });
 
   if (asks.status == "success") {
-    console.log(asks.data);
     return (
       <div className="flex flex-col w-full">
         <FlatList
