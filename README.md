@@ -109,7 +109,6 @@ $ flask db upgrade
 ```
 
 
-
 ### Lockers and ask flow
 
 

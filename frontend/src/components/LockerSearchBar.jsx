@@ -12,7 +12,7 @@ const LockerInfo = (props) => {
       <div className="flex-row p-1 text-base font-bold border-b">{name}</div>
       <div className="flex-col p-1 border m-1 text-sm items-left">
         {addressItems.map((addressLine) => (
-          <div className="flex-row justify-left">{addressLine}</div>
+          <div key={addressLine.trim().split(" ").join("-")} className="flex-row justify-left">{addressLine}</div>
         ))}
       </div>
     </div>
@@ -180,7 +180,7 @@ const LockerSearchBar = ({ onSelectLocker }) => {
   return (
     <div className="flex-col flex justify-start items-center">
       <p className="text-lg font-bold p-2">
-        Enter your zip code to find a Locker
+        Enter a zip code to find a Locker
       </p>
       <form
         className="flex-row flex space-around justify-center pb-10"
