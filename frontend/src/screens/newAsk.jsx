@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useHistory } from 'react-router';
+
 import { LockerMapAsk } from "../features/lockers/LockerSearchBar";
 import LockerMap from "../features/lockers/LockerMap";
 import ItemExtractor from "../features/item/ItemExtractor";
@@ -20,28 +22,30 @@ function NewAsk() {
   const [saveAskerEmail, setSaveAskerEmail] = useState(true);
   const [saveAskCookie, setSaveAskCookie] = useState(true);
   const queryClient = useQueryClient();
+  const history = useHistory();
 
   const submitAsk = useMutation(postAsk, {
     onSuccess: (d) => {
       // Invalidate and refetch
       console.log("got data from submit ask:", d);
       const askId = d.id;
+      const code = d.code;
       setAskId(askId);
+      setCode(code);
       console.log("successfully created ask.", d);
-      // TODO: change this to only save this data if user opts in
-      AskCookieManager.storeAsk(askId, code);
+      // TODO: move this
+      AskCookieManager.setAskCodeCookie(askId, code);
+      const params = new URLSearchParams({['new']: true, ['code']: code });
+      history.replace({ pathname: '/ask/'+askId, search:  params.toString() });
     },
     onError: (e) => {
       console.log(`POST failed! ${e.message}`);
     },
   });
 
-
   const handleSubmitAsk = async (event) => {
     event.preventDefault(); // Prevent default submission
-    const code = AskCookieManager.getCode();
-    setCode(code);
-
+    const code = AskCookieManager.getNewAskCode();
     const askData = {
       code: code,
       locker_place_id: selectedLocker.google_place_id,
@@ -49,7 +53,6 @@ function NewAsk() {
       item_asin: itemAsin,
       item_url: itemAffiliatesLink,
     };
-
     submitAsk.mutate(askData);
   };
 
