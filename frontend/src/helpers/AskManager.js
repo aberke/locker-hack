@@ -47,6 +47,10 @@ export const AskCookieManager = {
 		expires = "; expires=" + date.toUTCString();
 		document.cookie = `ask-${askId}=${code}${expires}; path=/`;	
 	},
+
+	deleteAskCodeCookie: (askId) => {
+		console.log("TODO: delete ask code cookie for ask id", askId);
+	},
 	
 	getAskCodeCookie: (askId) => {
 		return getCookie(`ask-${askId}`);

@@ -48,3 +48,17 @@ export const getAsks = async () => {
     return newAsks;
   });
 };
+
+export const getAsk = async (askId) => {
+  // Get ask from server
+  const url = `/api/ask/${askId}`;
+  console.log('getAsk', askId, url)
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+};
