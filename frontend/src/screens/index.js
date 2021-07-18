@@ -1,1 +1,2 @@
-export { default as NewAsk} from "./newAsk";
+export { default as NewAsk} from "./NewAsk";
+export { default as Ask} from "./Ask";
