@@ -53,8 +53,7 @@ def api_post_ask():
         if field in data:
             setattr(ask, field, data[field])
     db.session.add(ask)
-    if 'note' in data:
-        db.session.add(Note(text=data['note'], ask=ask))
+    db.session.add(Note(text=data['note'], ask=ask))
     db.session.commit()
     ask_url = util.get_ask_url_with_code(ask)
     response = jsonify(ask.to_dict())
@@ -135,10 +134,18 @@ def api_delete_ask(id):
     return 'TODO: only allow if code present or basic user auth'
 
 
+## For debugging
+def clear_data(session):
+    meta = db.metadata
+    for table in reversed(meta.sorted_tables):
+        print('Clear table %s' % table)
+        session.execute(table.delete())
+    session.commit()
+
 @app.shell_context_processor
 def make_shell_context():
     """
     Allows for flask shell interactions with database objects.
     $ flask shell
     """
-    return {'db': db, 'Ask': Ask, 'Note': Note}
+    return {'db': db, 'clear_data': clear_data, 'Ask': Ask, 'Note': Note}

@@ -38,21 +38,20 @@ export const getAsks = async () => {
     const lockerInfo = await Promise.all(
       data.asks.map((a) => getLockerInfoFromPlaceId(a.locker_place_id))
     );
-    const newAsks = data.asks.map((ask, i) => {
+    const asks = data.asks.map((ask, i) => {
       return {
         ...ask,
         locker: lockerInfo[i],
       };
     });
-    console.log("new asks:", newAsks);
-    return newAsks;
+    console.log("asks:", asks);
+    return asks;
   });
 };
 
 export const getAsk = async (askId) => {
   // Get ask from server
   const url = `/api/ask/${askId}`;
-  console.log('getAsk', askId, url)
   const response = await fetch(url, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
