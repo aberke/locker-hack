@@ -19,6 +19,7 @@ export default ({ ask }) => {
   // updated: "Fri, 16 Jul 2021 14:31:36 GMT"
 
   console.log("Got an ask:", ask);
+  const askerNote = ask.notes[0].text;
   return (
     <div className="flex flex-col border rounded-lg m-2 p-2">
       <div className="flex flex-row p-2 font-bold w-full">
@@ -35,6 +36,10 @@ export default ({ ask }) => {
             ></LockerMap>
           )}
         </div>
+      </div>
+      <div>
+        <h3>Note:</h3>
+        <p>{askerNote}</p>
       </div>
     </div>
   );

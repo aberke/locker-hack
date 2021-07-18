@@ -91,6 +91,13 @@ Useful tool when debugging:
 $ flask shell
 ```
 
+To clear out the database:
+```
+$ flask shell
+>> clear_data(db.session)
+```
+
+
 ### Data Migrations
 
 Alembic is used to handle data migrations. Any update to models must go with a data migration.
