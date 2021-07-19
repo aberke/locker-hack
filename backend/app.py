@@ -14,7 +14,7 @@ migrate = Migrate(app, db)
 
 
 from errors import bad_request
-from models import Ask, Note
+from models import Ask, Note, NoteTypes
 import notifications
 import util
 
@@ -61,7 +61,7 @@ def api_post_ask():
     return response, 201
 
 
-@app.route('/api/ask/<int:ask_id>/asker_email', methods=['POST', 'PUT'])
+@app.route('/api/ask/<int:ask_id>/asker-email', methods=['POST', 'PUT'])
 def api_post_asker_email(ask_id):
     """
     PUT/POST email for asker
@@ -79,7 +79,7 @@ def api_post_asker_email(ask_id):
     return 'success', 200
 
 
-@app.route('/api/ask/<int:ask_id>/buyer_email', methods=['POST', 'PUT'])
+@app.route('/api/ask/<int:ask_id>/buyer-email', methods=['POST', 'PUT'])
 def api_post_buyer_email(ask_id):
     """
     PUT/POST email for buyer
@@ -113,10 +113,10 @@ def api_post_note(ask_id):
     if 'text' not in data or len(data['text']) < 1:
         return bad_request('data must include text in note field')
     note = Note(text=data['text'], ask=ask)
-    if 'is_order_number' in data:
-        note.is_order_number = data['is_order_number']
-    elif 'is_locker_code' in data:
-        note.is_locker_code = data['is_locker_code']
+    if 'isOrderNumber' in data and data['isOrderNumber']:
+        note.type = NoteTypes.ORDER_NUMBER
+    elif 'isLockerCode' in data and data['isLockerCode']:
+        note.type = NoteTypes.LOCKER_CODE
     db.session.add(note)
     db.session.commit()
     return jsonify(ask.to_dict())
@@ -148,4 +148,10 @@ def make_shell_context():
     Allows for flask shell interactions with database objects.
     $ flask shell
     """
-    return {'db': db, 'clear_data': clear_data, 'Ask': Ask, 'Note': Note}
+    return {
+        'db': db,
+        'clear_data': clear_data,
+        'Ask': Ask,
+        'Note': Note,
+        'NoteTypes': NoteTypes
+    }
