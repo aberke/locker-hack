@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ItemIframe from "../item/ItemIframe";
 import moment from "moment";
 import LockerMap from "../../features/lockers/LockerMap";
+import { AskUrlManager } from "../../helpers/AskManager";
 
 export default ({ ask }) => {
   // ask:
@@ -20,6 +21,7 @@ export default ({ ask }) => {
 
   console.log("Got an ask:", ask);
   const askerNote = ask.notes[0].text;
+  const askUrl = AskUrlManager.getAskUrl(ask.id);
   return (
     <div className="flex flex-col border rounded-lg m-2 p-2">
       <div className="flex flex-row p-2 font-bold w-full">
@@ -40,6 +42,9 @@ export default ({ ask }) => {
       <div>
         <h3>Note:</h3>
         <p>{askerNote}</p>
+      </div>
+      <div>
+          <a href={askUrl}>Buy it: {askUrl}</a>
       </div>
     </div>
   );
