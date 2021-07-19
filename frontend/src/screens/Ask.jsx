@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 import { useQuery } from "react-query";
 import { getAsk } from "../api";
-import { AskCookieManager } from "../helpers/AskManager";
+import { AskCookieManager, AskUrlManager } from "../helpers/AskManager";
 
 const URL = "http://mutual.supply";
 
@@ -100,7 +100,7 @@ function Ask() {
                       
                     </p>
                     <p>TODO: better copy.</p>
-                    <a href={'/ask/' + ask.id + '?code=' + ask.code}>{`${URL}/ask/${ask.id}?code=${ask.code}`}</a>
+                    <a href={AskUrlManager.getAskUrl(id) + '?code=' + ask.code}>{`${URL}/ask/${ask.id}?code=${ask.code}`}</a>
 
                     <div id="save-code-in-cookie-container">
                     <label>

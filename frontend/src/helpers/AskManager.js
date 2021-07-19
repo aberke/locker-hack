@@ -80,6 +80,6 @@ export const AskCookieManager = {
 
 export const AskUrlManager = {
 	getAskUrl: (askId, code) => {
-		return '/ask/${askId}' + (code ? '?code=${code}' : '');
+		return `/ask/${askId}` + (code ? `?code=${code}` : ``);
 	}
 }
