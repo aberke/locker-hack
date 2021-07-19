@@ -1,8 +1,8 @@
 """initial tables
 
-Revision ID: fd407bac6e72
+Revision ID: daca375de800
 Revises: 
-Create Date: 2021-07-09 13:26:16.191863
+Create Date: 2021-07-18 22:44:10.651775
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'fd407bac6e72'
+revision = 'daca375de800'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -39,8 +39,7 @@ def upgrade():
     sa.Column('created', sa.DateTime(), nullable=True),
     sa.Column('ask_id', sa.Integer(), nullable=False),
     sa.Column('text', sa.String(length=1400), nullable=False),
-    sa.Column('is_order_number', sa.Boolean(), nullable=True),
-    sa.Column('is_locker_code', sa.Boolean(), nullable=True),
+    sa.Column('type', sa.Enum('SIMPLE_MESSAGE', 'ORDER_NUMBER', 'LOCKER_CODE', name='notetypes'), nullable=True),
     sa.ForeignKeyConstraint(['ask_id'], ['ask.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
