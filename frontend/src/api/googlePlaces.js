@@ -56,7 +56,7 @@ export const getPlaceInfo = async (googlePlaceId) => {
   const params = new URLSearchParams();
   params.append("key", API_KEY);
   params.append("place_id", googlePlaceId);
-  params.append("fields", "address_component,name,geometry");
+  params.append("fields", "formatted_address,address_component,name,geometry");
   const resp = await fetch(url + params, {
     headers: {},
     method: "GET",

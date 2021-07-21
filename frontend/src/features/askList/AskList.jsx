@@ -8,7 +8,7 @@ import { getLockerInfoFromPlaceId } from "../lockers/api";
 export default () => {
   const asks = useQuery("asks", getAsks, {
     onSuccess: (data) => {
-      console.log("lockers", data);
+      console.log("asks", data);
     },
   });
 
@@ -18,7 +18,7 @@ export default () => {
         <FlatList
           list={asks.data}
           renderItem={(a) => {
-            return <AskItem ask={a} />;
+            return <AskItem key={a.id} ask={a} />;
           }}
           keyExtractor={(a) => a.id}
         />
