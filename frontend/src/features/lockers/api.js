@@ -22,6 +22,7 @@ export const getLockerInfoFromPlaceId = async (placeId) => {
         name: l.name,
         google_place_id: l.place_id,
         vicinity: l.vicinity,
+        address: l.formatted_address,
       };
     })
     .catch((err) => {

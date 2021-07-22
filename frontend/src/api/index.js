@@ -32,7 +32,6 @@ export const getAsks = async () => {
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
-
   return response.json().then(async (data) => {
     // Get Locker info as well, and attach it to ask object
     const lockerInfo = await Promise.all(
@@ -59,5 +58,11 @@ export const getAsk = async (askId) => {
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
-  return response.json();
+  return response.json().then(async (ask) => {
+    const lockerInfo = await getLockerInfoFromPlaceId(ask.locker_place_id);
+    return {
+      ...ask,
+      locker: lockerInfo,
+    };
+  });
 };

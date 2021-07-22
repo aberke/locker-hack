@@ -6,6 +6,8 @@ import {
 import { useQuery } from "react-query";
 import { getAsk } from "../api";
 import { AskCookieManager, AskUrlManager } from "../helpers/AskManager";
+import ItemIframe from "../features/item/ItemIframe";
+import LockerMap from "../features/lockers/LockerMap";
 
 const URL = "http://mutual.supply";
 
@@ -70,8 +72,6 @@ function Ask() {
       <div className="container flex-col w-full items-center">
         <div className="row items-center justify-center my-5">
           <div className="col-lg-10">
-            <p>is new: { String(isNew) } </p>
-            <p>code: { code } </p>
             {(askQuery.status === 'loading') ? (
               <span>Loading...</span>
             ) : ((askQuery.status === 'error') ? (              
@@ -81,11 +81,11 @@ function Ask() {
              ) : null )}
 
              {/* the ask */}
-             { !!ask ? (
+             { !!ask && (
                <div id="ask container">
                 <p>ask status: {ask.status}</p>
                 {/* If this is a brand new ask: show the extra box to the user */}
-                {(ask.status === "open" && isNew && (ask.code == code)) ? (
+                {(ask.status === "open" && isNew && (ask.code == code)) && (
                   <div style={{border: "1px solid black"}} id="new-ask-container">
                     <p>(This is a brand new ask. The user was redirected from the new ask page.)</p>
                     <h3>LIVE</h3>
@@ -115,11 +115,42 @@ function Ask() {
                     </div>
 
                   </div>
-                ) : null}
-
+                )}
+                <div>
+                  <p>ASK item</p>
+                  <div className="flex flex-row w-full items-center justify-start">
+                    <ItemIframe asin={ask.item_asin} />
+                    {ask.locker && (
+                      <div className="flex flex-row w-full items-center justify-start">
+                        <div className="flex-shrink w-64 h-64 m-3">
+                          <div>
+                            <div className="flex-col flex">
+                              <div className="flex-col p-1 border m-1 text-sm items-left">
+                                {ask.locker.address.split(",").map((addressLine) => (
+                                  <div
+                                    key={addressLine.trim().split(" ").join("-")}
+                                    className="flex-row justify-left"
+                                  >
+                                    {addressLine}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex-shrink w-64 h-64 m-3">
+                          <LockerMap
+                            lockers={[ask.locker]}
+                            selectedLocker={ask.locker}
+                            zoom={15}
+                          ></LockerMap>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
-
-             ) : null }
+              </div>
+             )}
           </div>
         </div>
       </div>

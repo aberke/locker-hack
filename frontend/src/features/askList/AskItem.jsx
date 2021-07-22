@@ -29,15 +29,33 @@ export default ({ ask }) => {
       </div>
       <div className="flex flex-row w-full items-center justify-start">
         <ItemIframe asin={ask.item_asin} />
-        <div className="flex-shrink w-64 h-64 m-3">
-          {ask.locker && (
-            <LockerMap
-              lockers={[ask.locker]}
-              selectedLocker={ask.locker}
-              zoom={15}
-            ></LockerMap>
-          )}
-        </div>
+        {ask.locker && (
+          <div className="flex flex-row w-full items-center justify-start">
+            <div className="flex-shrink w-64 h-64 m-3">
+              <div>
+                <div className="flex-col flex">
+                  <div className="flex-col p-1 border m-1 text-sm items-left">
+                    {ask.locker.address.split(",").map((addressLine) => (
+                      <div
+                        key={addressLine.trim().split(" ").join("-")}
+                        className="flex-row justify-left"
+                      >
+                        {addressLine}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="flex-shrink w-64 h-64 m-3">
+              <LockerMap
+                lockers={[ask.locker]}
+                selectedLocker={ask.locker}
+                zoom={15}
+              ></LockerMap>
+            </div>
+          </div>
+        )}
       </div>
       <div>
         <h3>Note:</h3>
