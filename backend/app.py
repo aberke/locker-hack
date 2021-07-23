@@ -88,7 +88,7 @@ def api_post_buyer_email(ask_id):
     data = request.get_json() or {}
     if 'buyer_email' not in data:
         return bad_request('request must include buyer_email field')
-    asker_email = data['asker_email']
+    buyer_email = data['buyer_email']
     if 'save_email' in data and data['save_email']:
         ask.buyer_email = buyer_email
         db.session.add(ask)
