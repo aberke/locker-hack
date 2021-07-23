@@ -6,7 +6,7 @@ from datetime import datetime
 import enum
 from sqlalchemy.orm import backref, relationship
 
-from app import db
+from database import db
 
 
 # TODO: Tags

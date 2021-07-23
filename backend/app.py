@@ -1,37 +1,38 @@
 # Good resource to build this out:
 # https://blog.miguelgrinberg.com/post/how-to-create-a-react--flask-project
 
-from flask import Flask, request, jsonify, url_for
+import util
+import notifications
+from models import Ask, Note, NoteTypes
+from errors import bad_request
+from flask import Flask, request, jsonify, url_for, send_from_directory
+import os
 
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from database import db
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path="/static",
+            static_folder='./static/static')
 app.config.from_object(Config)
-db = SQLAlchemy(app)
+#db = SQLAlchemy(app)
+db.init_app(app) 
 migrate = Migrate(app, db)
-
-
-from errors import bad_request
-from models import Ask, Note, NoteTypes
-import notifications
-import util
 
 
 @app.route('/blog')
 def blog_redirect():
-    return 'Hello, World!' # Todo
+    return 'Hello, World!'  # Todo
 
 
 # API
-
 @app.route('/api/asks', methods=['GET'])
 def api_get_asks():
     """
     Returns all of the ask items, filtered by the URL parameters.
     """
-    # TODO: query for asks by place ids and other parameters 
+    # TODO: query for asks by place ids and other parameters
     asks = Ask.query.order_by(Ask.created.asc()).all()
     return jsonify({"asks": [ask.to_dict() for ask in asks]})
 
@@ -134,13 +135,21 @@ def api_delete_ask(id):
     return 'TODO: only allow if code present or basic user auth'
 
 
-## For debugging
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    path_dir = os.path.abspath("./static")  # path react build
+    return send_from_directory(path_dir, 'index.html')
+
+
+
 def clear_data(session):
     meta = db.metadata
     for table in reversed(meta.sorted_tables):
         print('Clear table %s' % table)
         session.execute(table.delete())
     session.commit()
+
 
 @app.shell_context_processor
 def make_shell_context():
