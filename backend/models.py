@@ -57,6 +57,13 @@ class Ask(db.Model):
         data['notes'] = [n.to_dict() for n in self.notes.order_by(Note.created.asc()).all()]
         return data
 
+class NoteTypes(enum.Enum):
+    SIMPLE_MESSAGE = 'simple'
+    ORDER_NUMBER = 'order-number'
+    LOCKER_CODE = 'locker-code'
+
+    def __repr__(self):
+        return "<%s>" % self.value
 
 class Note(db.Model):
     __tablename__ = 'note'
@@ -64,9 +71,10 @@ class Note(db.Model):
     created = db.Column(db.DateTime, index=True, default=datetime.utcnow) # indexed to query by sorted order
     ask_id = db.Column(db.Integer, db.ForeignKey('ask.id'), nullable=False)
     text = db.Column(db.String(1400), nullable=False) # equivalent to 5 tweets
-    is_order_number = db.Column(db.Boolean)
-    is_locker_code = db.Column(db.Boolean)
+    type = db.Column(db.Enum(NoteTypes), default=NoteTypes.SIMPLE_MESSAGE)
 
     def to_dict(self):
-        keys = ['is_order_number', 'ask_id', 'id', 'created', 'text', 'is_locker_code']
-        return { k: getattr(self, k) for k in keys }
+        data = {'type': self.type.value}
+        keys = ['ask_id', 'id', 'created', 'text']
+        data.update({ k: getattr(self, k) for k in keys })
+        return data
