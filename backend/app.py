@@ -13,8 +13,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from database import db
 
-app = Flask(__name__, static_url_path="/static",
-            static_folder='./static/static')
+app = Flask(__name__)
 app.config.from_object(Config)
 #db = SQLAlchemy(app)
 db.init_app(app) 
