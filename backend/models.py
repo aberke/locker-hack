@@ -59,8 +59,8 @@ class Ask(db.Model):
 
 class NoteTypes(enum.Enum):
     SIMPLE_MESSAGE = 'simple'
-    ORDER_NUMBER = 'order number'
-    LOCKER_CODE = 'locker code'
+    ORDER_NUMBER = 'order-number'
+    LOCKER_CODE = 'locker-code'
 
     def __repr__(self):
         return "<%s>" % self.value
