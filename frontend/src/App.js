@@ -1,8 +1,8 @@
 import "./App.css";
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Navigation, Footer, Home, About, MyStuff } from "./components";
-import { NewAsk, Ask } from "./screens";
+import { Navigation, Footer } from "./components";
+import { Home, NewAsk, Ask, About, MyStuff } from "./screens";
 import { QueryClient, QueryClientProvider } from "react-query";
 const queryClient = new QueryClient();
 
