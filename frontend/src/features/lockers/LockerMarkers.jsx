@@ -14,7 +14,7 @@ const LockerMarkers = ({
                 position={l.location}
                 name={l.name}
                 icon={{
-                    url: "/locker.svg",
+                    url: "/static/locker.svg",
                     anchor: new google.maps.Point(32,32),
                     scaledSize: new google.maps.Size(32,32)
                 }}
