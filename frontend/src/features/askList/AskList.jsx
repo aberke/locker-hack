@@ -4,8 +4,9 @@ import { getAsks } from "../../api";
 import FlatList from "flatlist-react";
 import AskItem from "./AskItem";
 
-function AskList () {
-  const asks = useQuery("asks", getAsks, {
+function AskList ({asksCodes}) {
+  const asksIds = (!!asksCodes) ? Object.keys(asksCodes) : null;
+  const asks = useQuery(["asks", {ids: asksIds}],() => getAsks({ids: asksIds}), {
     onSuccess: (data) => {
       console.log("asks", data);
     },

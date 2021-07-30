@@ -1,11 +1,7 @@
-# Good resource to build this out:
-# https://blog.miguelgrinberg.com/post/how-to-create-a-react--flask-project
-
 from flask import Flask, request, jsonify, send_from_directory, url_for
-
-from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from config import Config
 
 app = Flask(__name__, static_folder='./../frontend/public')
 app.config.from_object(Config)
@@ -22,7 +18,7 @@ import util
 @app.route('/blog')
 def blog_redirect():
     return 'Hello, World!' # Todo
-
+    
 
 @app.route('/static/<path:path>')
 def send_static(path):
@@ -37,7 +33,13 @@ def api_get_asks():
     Returns all of the ask items, filtered by the URL parameters.
     """
     # TODO: query for asks by place ids and other parameters 
-    asks = Ask.query.order_by(Ask.created.asc()).all()
+    # base query is for all asks
+    asks_query = Ask.query
+    ids = request.args.get('ids')
+    if ids and len(ids):
+        ids = [int(id) for id in ids.split(',')]
+        asks_query = asks_query.filter(Ask.id.in_(ids))
+    asks = asks_query.order_by(Ask.created.desc()).all() # TODO: paginate
     return jsonify({"asks": [ask.to_dict() for ask in asks]})
 
 

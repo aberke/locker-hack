@@ -1,7 +1,12 @@
 
-export const getAsks = async () => {
-  // Get all asks from server (unpaginated)
-  const response = await fetch("/api/asks", {
+export const getAsks = async ({ ids }) => {
+  // Get asks from server (unpaginated)
+  const url = `/api/asks?`;
+  const params = new URLSearchParams();
+  if (ids && ids.length > 0) {
+    params.append("ids", ids);
+  }
+  const response = await fetch(url + params, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   });
