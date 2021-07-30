@@ -37,8 +37,14 @@ def api_get_asks():
     """
     Returns all of the ask items, filtered by the URL parameters.
     """
-    # TODO: query for asks by place ids and other parameters
-    asks = Ask.query.order_by(Ask.created.asc()).all()
+    # TODO: query for asks by place ids and other parameters 
+    # base query is for all asks
+    asks_query = Ask.query
+    ids = request.args.get('ids')
+    if ids and len(ids):
+        ids = [int(id) for id in ids.split(',')]
+        asks_query = asks_query.filter(Ask.id.in_(ids))
+    asks = asks_query.order_by(Ask.created.desc()).all() # TODO: paginate
     return jsonify({"asks": [ask.to_dict() for ask in asks]})
 
 

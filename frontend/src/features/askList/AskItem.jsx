@@ -35,7 +35,7 @@ function AskItem ({ ask }) {
         <p>{askerNote}</p>
       </div>
       <div>
-          <a href={askUrl}>Buy it: {askUrl}</a>
+          <a href={askUrl}>{askUrl}</a>
       </div>
     </div>
   );
