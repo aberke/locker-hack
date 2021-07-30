@@ -26,6 +26,11 @@ def blog_redirect():
     return 'Hello, World!'  # Todo
 
 
+@app.route('/static/<path:path>')
+def send_static(path):
+    return send_from_directory('./../frontend/public', path)
+
+
 # API
 @app.route('/api/asks', methods=['GET'])
 def api_get_asks():
