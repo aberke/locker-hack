@@ -4,7 +4,7 @@ import LockerSearchBar from "../features/lockers/LockerSearchBar";
 import ItemExtractor from "../features/item/ItemExtractor";
 import { AskCookieManager } from "../helpers/AskManager";
 import { postAsk } from "../api";
-import { useQueryClient, useMutation } from "react-query";
+import { useMutation } from "react-query";
 import LockerLocation from "../features/lockers/LockerLocation";
 
 
@@ -16,10 +16,6 @@ function NewAsk() {
   const [note, setNote] = useState("");
   const [code, setCode] = useState("");
   const [askId, setAskId] = useState("");
-  const [askerEmail, setAskerEmail] = useState("");
-  const [saveAskerEmail, setSaveAskerEmail] = useState(true);
-  const [saveAskCookie, setSaveAskCookie] = useState(true);
-  const queryClient = useQueryClient();
   const history = useHistory();
 
   const submitAsk = useMutation(postAsk, {
@@ -31,8 +27,6 @@ function NewAsk() {
       setAskId(askId);
       setCode(code);
       console.log("successfully created ask.", d);
-      // TODO: move this
-      AskCookieManager.setAskCodeCookie(askId, code);
       const params = new URLSearchParams({['new']: true, ['code']: code });
       history.replace({ pathname: '/ask/'+askId, search:  params.toString() });
     },

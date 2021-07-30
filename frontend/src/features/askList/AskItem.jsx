@@ -4,7 +4,7 @@ import moment from "moment";
 import LockerLocation from "../lockers/LockerLocation";
 import { AskUrlManager } from "../../helpers/AskManager";
 
-export default ({ ask }) => {
+function AskItem ({ ask }) {
   // ask:
   // code: "m0b7"
   // created: "Fri, 16 Jul 2021 14:31:36 GMT"
@@ -40,3 +40,4 @@ export default ({ ask }) => {
     </div>
   );
 };
+export default AskItem;
