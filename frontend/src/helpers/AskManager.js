@@ -14,10 +14,10 @@ function getCookie(cname) {
   let ca = decodedCookie.split(';');
   for(let i = 0; i <ca.length; i++) {
     let c = ca[i];
-    while (c.charAt(0) == ' ') {
+    while (c.charAt(0) === ' ') {
       c = c.substring(1);
     }
-    if (c.indexOf(name) == 0) {
+    if (c.indexOf(name) === 0) {
       return c.substring(name.length, c.length);
     }
   }
@@ -28,7 +28,7 @@ function getCookie(cname) {
 export const AskCookieManager = {
 
 	isValidCode: (code) => {
-		return (typeof(code) == "string" && code.length == codeLength);
+		return (typeof(code) === "string" && code.length === codeLength);
 	},
 
 	generateCode: () => {
@@ -65,10 +65,10 @@ export const AskCookieManager = {
 		let askCodes = {};
 		for(let i = 0; i <ca.length; i++) {
 			let c = ca[i].split("ask-");
-			if (c.length != 2)
+			if (c.length !== 2)
 				continue;
 			let askCookie = c[1].split("=");
-			if (askCookie.length != 2)
+			if (askCookie.length !== 2)
 				continue;
 			let askId = askCookie[0];
 			let code = askCookie[1];
