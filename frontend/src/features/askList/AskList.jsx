@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { useQuery } from "react-query";
 import { getAsks } from "../../api";
 import FlatList from "flatlist-react";
 import AskItem from "./AskItem";
-import { getLockerInfoFromPlaceId } from "../lockers/api";
 
 export default () => {
   const asks = useQuery("asks", getAsks, {
@@ -12,7 +11,7 @@ export default () => {
     },
   });
 
-  if (asks.status == "success") {
+  if (asks.status === "success") {
     return (
       <div className="flex flex-col w-full">
         <FlatList
@@ -24,7 +23,7 @@ export default () => {
         />
       </div>
     );
-  } else if (asks.status == "loading") {
+  } else if (asks.status === "loading") {
     return (
       <div>
         <h1>Loading...</h1>

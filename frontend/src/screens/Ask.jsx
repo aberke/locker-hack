@@ -8,7 +8,9 @@ import { useQuery, useMutation } from "react-query";
 import { getAsk, postAskerEmail, postNote } from "../api";
 import { AskCookieManager, AskUrlManager } from "../helpers/AskManager";
 import ItemIframe from "../features/item/ItemIframe";
-import LockerMap from "../features/lockers/LockerMap";
+// import LockerMap from "../features/lockers/LockerMap";
+import LockerLocation from "../features/lockers/LockerLocation";
+
 
 const URL = "http://mutual.supply";
 
@@ -66,7 +68,7 @@ function Ask() {
   const handleSaveCodeInCookieChange = (event) => {
     const saveInCookieValue = event.target.checked;
     setSaveCode(saveInCookieValue);
-    if (saveInCookieValue == false) {
+    if (saveInCookieValue === false) {
       AskCookieManager.deleteAskCodeCookie(id);
     } else {
       AskCookieManager.setAskCodeCookie(id, code);
@@ -131,7 +133,7 @@ function Ask() {
               <div id="ask container">
               <p>ask status: {ask.status}</p>
               {/* If this is a brand new ask: show the extra box to the user */}
-              {(ask.status === "open" && isNew && (ask.code == code)) && (
+              {(ask.status === "open" && isNew && (ask.code === code)) && (
                 <div style={{border: "1px solid black"}} id="new-ask-container">
                   <p>(This is a brand new ask. The user was redirected from the new ask page.)</p>
                   <h3>Your ASK is live!</h3>
@@ -195,33 +197,7 @@ function Ask() {
                 <p>ASK item</p>
                 <div className="flex flex-row w-full items-center justify-start">
                   <ItemIframe asin={ask.item_asin} />
-                  {ask.locker && (
-                    <div className="flex flex-row w-full items-center justify-start">
-                      <div className="flex-shrink w-64 h-64 m-3">
-                        <div>
-                          <div className="flex-col flex">
-                            <div className="flex-col p-1 border m-1 text-sm items-left">
-                              {ask.locker.address.split(",").map((addressLine) => (
-                                <div
-                                  key={addressLine.trim().split(" ").join("-")}
-                                  className="flex-row justify-left"
-                                >
-                                  {addressLine}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex-shrink w-64 h-64 m-3">
-                        <LockerMap
-                          lockers={[ask.locker]}
-                          selectedLocker={ask.locker}
-                          zoom={15}
-                        ></LockerMap>
-                      </div>
-                    </div>
-                  )}
+                  <LockerLocation ask={ask} />
                 </div>
               </div>
             </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 export default (props) => {
   const { name, vicinity } = props.info;

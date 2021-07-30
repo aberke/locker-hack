@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 import { useHistory } from 'react-router';
-
-import { LockerMapAsk } from "../features/lockers/LockerSearchBar";
-import LockerMap from "../features/lockers/LockerMap";
+import LockerSearchBar from "../features/lockers/LockerSearchBar";
 import ItemExtractor from "../features/item/ItemExtractor";
-import { ReactComponent as LockerSvg } from "../features/lockers/locker.svg";
-import { AskCookieManager, AskUrlManager } from "../helpers/AskManager";
+import { AskCookieManager } from "../helpers/AskManager";
 import { postAsk } from "../api";
 import { useQueryClient, useMutation } from "react-query";
+import LockerLocation from "../features/lockers/LockerLocation";
 
-const SIZE = 50;
+
 function NewAsk() {
   const [selectedLocker, setSelectedLocker] = useState(null);
   const [lockerConfirmed, setLockerConfirmed] = useState(false);
@@ -72,9 +70,10 @@ function NewAsk() {
                 {itemAsin && itemAffiliatesLink ? (
                   <div>
                     {selectedLocker === null ? (
-                      <LockerMapAsk
-                        onSelectLocker={(l) => setSelectedLocker(l)}
-                      />
+                    <LockerSearchBar
+                      locker={selectedLocker}
+                      onSelectLocker={(l) => setSelectedLocker(l)}
+                    />
                     ) : (
                       <div className="flex-col p-5">
                         <p className="text-lg font-bold p-2">Your Locker:</p>
@@ -84,30 +83,8 @@ function NewAsk() {
                               ? "flex-row flex items-center justify-center border p-2"
                               : "flex-row flex items-center justify-center border-2 p-2"
                           }
-                        >
-                          <div className="flex-shrink w-64 h-64 m-3">
-                            <LockerMap
-                              lockers={[selectedLocker]}
-                              selectedLocker={selectedLocker}
-                              zoom={15}
-                            ></LockerMap>
-                          </div>
-                          <div className="flex-col">
-                            <p className="text-lg font-bold text-left underline">
-                              {selectedLocker.name}
-                            </p>
-                            {selectedLocker.vicinity
-                              .replace("at", "")
-                              .split(",")
-                              .map((l) => (
-                                <p
-                                  key={l.trim().split(" ").join("-")}
-                                  className="text-lg font-bold text-left"
-                                >
-                                  {l}
-                                </p>
-                              ))}
-                          </div>
+                          >
+                          <LockerLocation ask={{locker_place_id: selectedLocker.google_place_id}} />
                         </div>
                         <div className="flex flex-row justify-center">
                           <button
@@ -127,8 +104,7 @@ function NewAsk() {
                         </div>
                       </div>
                     )}
-
-                    {itemAsin && itemAffiliatesLink && lockerConfirmed ? (
+                    {itemAsin && itemAffiliatesLink && selectedLocker && lockerConfirmed ? (
                       <div>
                         <div className="ask-note-container">
                           <h4>ADD A NOTE</h4>
