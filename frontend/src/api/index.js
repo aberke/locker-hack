@@ -1,5 +1,3 @@
-import { getLockerInfoFromPlaceId } from "../features/lockers/api";
-
 
 export const getAsks = async () => {
   // Get all asks from server (unpaginated)
@@ -11,18 +9,7 @@ export const getAsks = async () => {
     throw new Error("Network response was not ok");
   }
   return response.json().then(async (data) => {
-    // Get Locker info as well, and attach it to ask object
-    const lockerInfo = await Promise.all(
-      data.asks.map((a) => getLockerInfoFromPlaceId(a.locker_place_id))
-    );
-    const asks = data.asks.map((ask, i) => {
-      return {
-        ...ask,
-        locker: lockerInfo[i],
-      };
-    });
-    console.log("asks:", asks);
-    return asks;
+    return data.asks;
   });
 };
 
@@ -36,22 +23,10 @@ export const getAsk = async (askId) => {
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
-  return response.json().then(async (ask) => {
-    const lockerInfo = await getLockerInfoFromPlaceId(ask.locker_place_id);
-    return {
-      ...ask,
-      locker: lockerInfo,
-    };
-  });
+  return response.json();
 };
 
 export const postAsk = async (askData) => {
-  // Post an ask to our server with `askData`:
-  // code: Ask code
-  // locker_place_id: Google Place ID of the locker
-  // note: Text note submitted by person
-  // item_asin: Amazon ASIN of the item
-  // item_url: URL of the item (amazon)
   let body = JSON.stringify(askData);
   const requestOptions = {
     method: "POST",

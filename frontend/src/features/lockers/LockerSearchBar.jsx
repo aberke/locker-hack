@@ -1,18 +1,29 @@
 import React, { useEffect, useState } from "react";
 import FlatList from "flatlist-react";
-import fetch from "node-fetch";
-import LockerPins from "./LockerPins";
-import ReactMapGL, { Popup } from "react-map-gl";
-import LockerMap from "./LockerMap";
+import { 
+  Map, 
+  InfoWindow,
+  GoogleApiWrapper 
+} from "google-maps-react";
+import {
+  LockerLoadingContainer, 
+  MapContainerStyle, 
+  MapStyle
+} from "./LockerMapStyling";
 import LockerInfo from "./LockerInfo";
-import { useQuery, useQueryClient } from "react-query";
 import { getLockersNearLatLng } from "./api";
 import { geocodeAddress } from '../../api/googlePlaces'
+import LockerMarkers from "./LockerMarkers";
 
-const LockerList = ({ lockers, selectedLocker, onLockerClicked }) => {
+
+const LockerList = ({
+  lockers, 
+  selectedLocker, 
+  onLockerClicked, 
+  visible 
+}) => {
   const LockerListItem = ({ locker }) => {
-    const isSelected =
-      selectedLocker == undefined ? false : selectedLocker.name === locker.name;
+    const isSelected = !selectedLocker ? false : selectedLocker.name === locker.name;
     const selectedClass = isSelected ? "bg-gray-100 font-bold" : "";
     const className = `flex-col border-b mb-1 p-2 w-full items-center ${selectedClass}`;
     return (
@@ -21,7 +32,9 @@ const LockerList = ({ lockers, selectedLocker, onLockerClicked }) => {
       </button>
     );
   };
-
+  if (!visible) {
+    return <span></span>;
+  }
   return (
     <div className="flex-col">
       <div className="bg-yellow">
@@ -30,7 +43,7 @@ const LockerList = ({ lockers, selectedLocker, onLockerClicked }) => {
       <FlatList
         list={lockers}
         renderItem={(l) => {
-          return <LockerListItem locker={l} key={l.name} />;
+          return <LockerListItem key={l.google_place_id} locker={l} />;
         }}
         keyExtractor={(l) => l.name}
       />
@@ -38,36 +51,60 @@ const LockerList = ({ lockers, selectedLocker, onLockerClicked }) => {
   );
 };
 
-const LockerSearchBar = ({ onSelectLocker }) => {
+const LockerSearchBar = ({ 
+  google,
+  onSelectLocker,
+  locker=null,
+  zoom=11,
+}) => {
   const [lockers, setLockers] = useState([]);
   const [zipCode, setZipCode] = useState("");
-  const [clickedLocker, setClickedLocker] = useState();
+  const [map, setMap] = useState(null);
+  const [mapCenter, setMapCenter] = useState(null);
+  const [selectedLocker, setSelectedLocker] = useState(locker);
+  
+  const mapReady = (mapProps, map) => {
+    setMap(map);
+    map.setOptions({ styles: MapStyle });
+  }
 
-  const { status, refetch } = useQuery(
-    ["geocodeAddress", zipCode],
-    () => geocodeAddress(zipCode),
-    {
-      onSuccess: (data) => {
-        console.log("Got loc for address:", data);
-        getLockers(data);
-      },
+  const handleLookupLockers = async (event) => {
+    event.preventDefault(); // Prevent default submission
+    const latLng = await geocodeAddress(zipCode);
+    if ('lat' in latLng) {
+      setMapCenter(latLng);
+      getLockers(latLng);
     }
-  );
+  }
 
   const getLockers = (latLng) => {
-    return getLockersNearLatLng(latLng).then((lockers) => {
-      console.log(lockers);
+    return getLockersNearLatLng(google, map, latLng).then((lockers) => {
       setLockers(lockers);
+      if (!lockers.length) return;
+      setSelectedLocker(lockers[0]);
     });
   };
 
+  // handle the case when parent component updates locker (e.g. to null)
+  useEffect(() => {
+    setSelectedLocker(locker);
+  }, [locker]);
+
+  useEffect(() => {
+    if (selectedLocker) {
+      setMapCenter(selectedLocker.location);
+    }
+  }, [selectedLocker]);
+
   // automatically set to the first result
   useEffect(() => {
-    setClickedLocker(lockers[0]);
+    if (!lockers.length) return;
+    setSelectedLocker(lockers[0]);
   }, [lockers]);
 
   const onLockerClick = (l) => {
-    setClickedLocker(l);
+    setSelectedLocker(l);
+    setMapCenter(l.location);
   };
 
   return (
@@ -83,42 +120,57 @@ const LockerSearchBar = ({ onSelectLocker }) => {
             onChange={(e) => setZipCode(e.target.value)}
           />
         </div>
-        <button className="rounded-lg bg-yellow p-1 m-2">
-          <p className="font-bold text-black">Submit</p>
-        </button>
+        {!!map && (
+          <button onClick={handleLookupLockers} className="rounded-lg bg-yellow p-1 m-2">
+            <p className="font-bold text-black">Submit</p>
+          </button>
+        )}
       </form>
 
-      {!(status == "loading" || status == "error") && (
-        <div className="flex-row w-full flex items-start h-96">
-          <div className="flex-shrink w-2/3 h-full">
-            <LockerMap
-              lockers={lockers}
-              selectedLocker={clickedLocker}
-              onLockerClicked={onLockerClick}
-              showPopup={true}
-            />
-          </div>
-          <div className="h-full w-1/3 overflow-scroll">
-            <LockerList
-              lockers={lockers}
-              selectedLocker={clickedLocker}
-              onLockerClicked={onLockerClick}
-            />
-          </div>
+      <div className="flex-row w-full flex items-start h-96">
+        <div className="flex-shrink w-2/3 h-full">
+        <Map
+            containerStyle={MapContainerStyle} 
+            google={google}
+            onReady={mapReady}
+            zoom={zoom}
+            center={mapCenter}
+            visible={!!mapCenter}
+          >
+            { LockerMarkers({google: google, lockers: lockers, onLockerClicked: onLockerClick}) }
+
+            {!!selectedLocker && (
+              <InfoWindow 
+                position={selectedLocker.location} 
+                visible={true}
+                >
+                <LockerInfo info={selectedLocker} />
+              </InfoWindow>
+            )}
+          </Map>
         </div>
-      )}
-      {clickedLocker !== undefined ? (
+        <div className="h-full w-1/3 overflow-scroll">
+          <LockerList
+            visible={!!mapCenter}
+            lockers={lockers}
+            selectedLocker={selectedLocker}
+            onLockerClicked={onLockerClick}
+          />
+        </div>
+      </div>
+      {!!selectedLocker && (
         <button
           className="m-2 m-5 p-2 text-lg text-white bg-black font-bold rounded-lg"
-          onClick={() => onSelectLocker(clickedLocker)}
+          onClick={() => onSelectLocker(selectedLocker)}
         >
           Select This Locker
         </button>
-      ) : (
-        <></>
       )}
     </div>
   );
 };
 
-export const LockerMapAsk = LockerSearchBar;
+export default GoogleApiWrapper({
+  apiKey: process.env.REACT_APP_GOOGLE_PLACES_API_KEY,
+  LoadingContainer: LockerLoadingContainer,
+})(LockerSearchBar);

@@ -1,7 +1,7 @@
 const API_KEY = process.env.REACT_APP_GOOGLE_PLACES_API_KEY;
 
 export const geocodeAddress = async (address) => {
-  console.log("looking up loc for address:", address);
+  console.log("looking up geocode location for address:", address);
   const url = `https://maps.googleapis.com/maps/api/geocode/json?`;
   const params = new URLSearchParams();
   params.append("address", address);
@@ -13,53 +13,55 @@ export const geocodeAddress = async (address) => {
   if (!resp.ok) {
     throw new Error("Network response was not ok");
   }
-  console.log("response!!!", resp);
-
   const obj = await resp.json();
-  console.log("json:", obj);
   if (obj.results.length > 0) {
-    console.log(obj.results[0]);
-    console.log(
-      "Setting zip code lat/lng to:",
-      obj.results[0].geometry.location
-    );
-    const loc = obj.results[0].geometry.location;
-    return loc;
+    return obj.results[0].geometry.location;
   } else {
-    console.log("no Results for zip code.");
+    console.log("no Results for address", address);
     return {};
   }
 };
 
-export const getNearbyPlaces = async ({ latLng, keyword }) => {
-  console.log("Getting Lockers...");
-  const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?`;
-  const params = new URLSearchParams();
-  console.log("Zip code lat lng:", latLng);
-  params.append("key", API_KEY);
-  params.append("keyword", keyword);
-  params.append("fields", "formatted_address,geometry,icon,photos");
-  params.append("location", `${latLng.lat},${latLng.lng}`);
-  params.append("rankby", "distance");
-
-  const resp = await fetch(url + params, {
-    headers: {},
-    method: "GET",
+export const getNearbyPlaces = async ({google, map, latLng, keyword}) => {
+  return new Promise(function(resolve, reject) {
+    const service = new google.maps.places.PlacesService(map);
+    const request = {
+      location: latLng,
+      keyword: keyword,
+      fields: ["icon", "formatted_address", "place_id", "geometry"],
+      rankBy: google.maps.places.RankBy.DISTANCE,
+    };
+    service.nearbySearch(request, (results, status) => {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        resolve(results);
+      } else {
+        throw new Error(`PlacesService response was not ok: ${status}`);
+      }
+    });
   });
-  return resp.json();
 };
 
-export const getPlaceInfo = async (googlePlaceId) => {
-  // Get the place details from the Google Places API.
-  console.log("google place ID:", googlePlaceId);
-  const url = "https://maps.googleapis.com/maps/api/place/details/json?";
-  const params = new URLSearchParams();
-  params.append("key", API_KEY);
-  params.append("place_id", googlePlaceId);
-  params.append("fields", "formatted_address,address_component,name,geometry");
-  const resp = await fetch(url + params, {
-    headers: {},
-    method: "GET",
+export const getPlaceInfo = async (google, map, placeId) => {
+  return new Promise(function (resolve, reject) {
+    const service = new google.maps.places.PlacesService(map);
+    const request = {
+      placeId: placeId,
+      fields: ["name", "formatted_address", "place_id", "geometry"],
+    };
+    service.getDetails(request, (place, status) => {
+      if (
+        status === google.maps.places.PlacesServiceStatus.OK &&
+        place &&
+        place.geometry &&
+        place.geometry.location
+      ) {
+        resolve({
+          ...place,
+          location: place.geometry.location,
+        });
+      } else {
+        throw new Error(`PlacesService response was not ok: ${status}`);
+      }
+    });
   });
-  return resp.json();
 };
