@@ -4,7 +4,7 @@ import { getAsks } from "../../api";
 import FlatList from "flatlist-react";
 import AskItem from "./AskItem";
 
-export default () => {
+function AskList () {
   const asks = useQuery("asks", getAsks, {
     onSuccess: (data) => {
       console.log("asks", data);
@@ -37,3 +37,5 @@ export default () => {
     );
   }
 };
+
+export default AskList;

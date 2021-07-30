@@ -1,6 +1,6 @@
 import React from "react";
 
-export default (props) => {
+function LockerInfo (props) {
   const { name, vicinity } = props.info;
   const addressItems = vicinity.replace("at ", "").split(",");
   return (
@@ -19,3 +19,4 @@ export default (props) => {
     </div>
   );
 };
+export default LockerInfo;
