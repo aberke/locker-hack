@@ -1,24 +1,24 @@
-from flask import Flask, request, jsonify, send_from_directory, url_for
-from flask_sqlalchemy import SQLAlchemy
+import os
 from flask_migrate import Migrate
+from flask import Flask, request, jsonify, send_from_directory
+
+import util
+import notifications
+from errors import bad_request
+from models import Ask, Note, NoteTypes
 from config import Config
+from database import db
 
 app = Flask(__name__, static_folder='./../frontend/public')
 app.config.from_object(Config)
-db = SQLAlchemy(app)
+db.init_app(app)
 migrate = Migrate(app, db)
-
-
-from errors import bad_request
-from models import Ask, Note, NoteTypes
-import notifications
-import util
 
 
 @app.route('/blog')
 def blog_redirect():
-    return 'Hello, World!' # Todo
-    
+    return 'Hello, World!'  # Todo
+
 
 @app.route('/static/<path:path>')
 def send_static(path):
@@ -26,20 +26,19 @@ def send_static(path):
 
 
 # API
-
 @app.route('/api/asks', methods=['GET'])
 def api_get_asks():
     """
     Returns all of the ask items, filtered by the URL parameters.
     """
-    # TODO: query for asks by place ids and other parameters 
+    # TODO: query for asks by place ids and other parameters
     # base query is for all asks
     asks_query = Ask.query
     ids = request.args.get('ids')
     if ids and len(ids):
         ids = [int(id) for id in ids.split(',')]
         asks_query = asks_query.filter(Ask.id.in_(ids))
-    asks = asks_query.order_by(Ask.created.desc()).all() # TODO: paginate
+    asks = asks_query.order_by(Ask.created.desc()).all()  # TODO: paginate
     return jsonify({"asks": [ask.to_dict() for ask in asks]})
 
 
@@ -141,13 +140,20 @@ def api_delete_ask(id):
     return 'TODO: only allow if code present or basic user auth'
 
 
-## For debugging
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    path_dir = os.path.abspath("./static")  # path react build
+    return send_from_directory(path_dir, 'index.html')
+
+
 def clear_data(session):
     meta = db.metadata
     for table in reversed(meta.sorted_tables):
         print('Clear table %s' % table)
         session.execute(table.delete())
     session.commit()
+
 
 @app.shell_context_processor
 def make_shell_context():
