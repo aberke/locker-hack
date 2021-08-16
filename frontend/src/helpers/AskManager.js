@@ -1,11 +1,14 @@
 // helper: Ask cookie manager 
 
+import { getAsk } from "../api";
+
 
 // codes are 4 characters.
 const codeLength = 4;
 
 // asks and codes are stored as individual cookies
-// the key for the cookie is ask-{askid}. 
+// the key for the ASK cookie is ask-{askid}. 
+// the key for the BUY cookie is buy-{askid}. 
 // The value is the code.
 
 function getCookie(cname) {
@@ -39,13 +42,17 @@ export const AskCookieManager = {
 		return AskCookieManager.generateCode();
 	},
 	
-	setAskCodeCookie: (askId, code) => {
+	setAskCodeCookie: (askId, code, type="ask") => {
+		// type should be 'ask' or 'buy'
+		if (type !== "ask" && type !== "buy") {
+			throw new Error("Ask code cookie must be of type 'ask' or 'buy'.");
+		}
 		let expires = "";
 		let days = 365; // expire after 1 year unless updated.
 		let date = new Date();
 		date.setTime(date.getTime() + (days*24*60*60*1000));
 		expires = "; expires=" + date.toUTCString();
-		document.cookie = `ask-${askId}=${code}${expires}; path=/`;	
+		document.cookie = `${type}-${askId}=${code}${expires}; path=/`;	
 	},
 
 	deleteAskCodeCookie: (askId) => {
@@ -56,7 +63,7 @@ export const AskCookieManager = {
 		return getCookie(`ask-${askId}`);
 	},
 
-	getAsks: () => {
+	getAsks: (type='ask') => {
 		// for the my-stuff page
 		// get asks from the cookies
 		// returns dictionary: {askId: code, ... for each ask in cookies}
@@ -64,7 +71,7 @@ export const AskCookieManager = {
 		let ca = decodedCookie.split(';');
 		let askCodes = {};
 		for(let i = 0; i <ca.length; i++) {
-			let c = ca[i].split("ask-");
+			let c = ca[i].split(`${type}-`);
 			if (c.length !== 2)
 				continue;
 			let askCookie = c[1].split("=");

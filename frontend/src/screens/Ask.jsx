@@ -112,6 +112,8 @@ function Ask() {
     else if (type === 'lockerCode')
       data['isLockerCode'] = true;
     submitNote.mutate(data);
+    // TODO: if this is a buy / an order number then:
+    // AskCookieManager.setAskCodeCookie(id, ask.code, type="buy");
   }
 
   return (
