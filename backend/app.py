@@ -1,21 +1,16 @@
-# Good resource to build this out:
-# https://blog.miguelgrinberg.com/post/how-to-create-a-react--flask-project
+import os
+from flask_migrate import Migrate
+from flask import Flask, request, jsonify, send_from_directory
 
 import util
 import notifications
-from models import Ask, Note, NoteTypes
 from errors import bad_request
-from flask import Flask, request, jsonify, url_for, send_from_directory
-import os
-
+from models import Ask, Note, NoteTypes
 from config import Config
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 from database import db
 
 app = Flask(__name__, static_folder='./../frontend/public')
 app.config.from_object(Config)
-#db = SQLAlchemy(app)
 db.init_app(app)
 migrate = Migrate(app, db)
 
