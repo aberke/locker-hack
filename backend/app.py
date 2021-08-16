@@ -22,7 +22,13 @@ migrate = Migrate(app, db)
 
 @app.route('/blog')
 def blog_redirect():
-    return 'Hello, World!'  # Todo
+    return 'Hello, World!' # Todo
+    
+
+@app.route('/static/<path:path>')
+def send_static(path):
+    return send_from_directory('./../frontend/public', path)
+
 
 
 @app.route('/static/<path:path>')
