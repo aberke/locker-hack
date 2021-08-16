@@ -16,14 +16,15 @@ from database import db
 app = Flask(__name__, static_folder='./../frontend/public')
 app.config.from_object(Config)
 #db = SQLAlchemy(app)
-db.init_app(app) 
+db.init_app(app)
 migrate = Migrate(app, db)
 
 
 @app.route('/blog')
 def blog_redirect():
-    return 'Hello, World!' # Todo
-   
+    return 'Hello, World!'  # Todo
+
+
 @app.route('/static/<path:path>')
 def send_static(path):
     return send_from_directory('./../frontend/public', path)
@@ -35,14 +36,14 @@ def api_get_asks():
     """
     Returns all of the ask items, filtered by the URL parameters.
     """
-    # TODO: query for asks by place ids and other parameters 
+    # TODO: query for asks by place ids and other parameters
     # base query is for all asks
     asks_query = Ask.query
     ids = request.args.get('ids')
     if ids and len(ids):
         ids = [int(id) for id in ids.split(',')]
         asks_query = asks_query.filter(Ask.id.in_(ids))
-    asks = asks_query.order_by(Ask.created.desc()).all() # TODO: paginate
+    asks = asks_query.order_by(Ask.created.desc()).all()  # TODO: paginate
     return jsonify({"asks": [ask.to_dict() for ask in asks]})
 
 
@@ -149,7 +150,6 @@ def api_delete_ask(id):
 def serve(path):
     path_dir = os.path.abspath("./static")  # path react build
     return send_from_directory(path_dir, 'index.html')
-
 
 
 def clear_data(session):
