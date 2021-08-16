@@ -1,7 +1,7 @@
 # Good resource to build this out:
 # https://blog.miguelgrinberg.com/post/how-to-create-a-react--flask-project
 
-from flask import Flask, request, jsonify, url_for
+from flask import Flask, request, jsonify, send_from_directory, url_for
 
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
@@ -22,6 +22,11 @@ import util
 @app.route('/blog')
 def blog_redirect():
     return 'Hello, World!' # Todo
+
+
+@app.route('/static/<path:path>')
+def send_static(path):
+    return send_from_directory('./../frontend/public', path)
 
 
 # API
