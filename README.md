@@ -53,7 +53,6 @@ Get the environment variables from someone and put them in file `./frontend/.env
 They should include
 ```
 REACT_APP_GOOGLE_PLACES_API_KEY=
-REACT_APP_MAPBOX_ACCESS_TOKEN=
 REACT_APP_AMAZON_ASSOCIATES_ID=mutualsupply-20
 ```
 
