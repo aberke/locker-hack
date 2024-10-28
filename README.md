@@ -1,12 +1,17 @@
 # locker-hack
-This simple system helps Amazon customers improve their privacy while providing for others in need. It leverages the Amazon Locker infrastructure  and allows users to anonymously request  items they need to be securely sent to a locker.  Other users can ‘purchase privacy’ by anonymously fulfilling these requests while adding noise to their Amazon purchase profile.
+This simple system helps Amazon customers improve their privacy while providing for others in need. It leverages the Amazon Locker infrastructure  and allows users to anonymously request  items they need to be securely sent to a locker.  Other users can "purchase privacy" by anonymously fulfilling these requests while adding noise to their Amazon purchase profile.
+
+## Poster
+
+We presented this project at the [3rd Workshop on Obfuscation (2021)](https://www.obfuscationworkshop.org/)
+
+![poster](poster.png)
+
+[(edit)](https://docs.google.com/presentation/d/1DY58HAHGyYpKlxFrMIPpR8vLTYD1IAxzyV8kDkAF40g/)
 
 
-[Workshop on Obfuscation Poster](https://docs.google.com/presentation/d/1DY58HAHGyYpKlxFrMIPpR8vLTYD1IAxzyV8kDkAF40g/)
 
-
-
-### Affiliates link
+## Affiliates link
 
 Let's extract money through Amazon affiliates  links
 
